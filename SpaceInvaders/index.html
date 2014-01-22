@@ -5,10 +5,19 @@
   <head>
     <title>SpaceInvaders</title>
     <meta charset="utf-8" />
+    <!-- script type="text/javascript" src="js/main.js"></script -->
+
   </head>
 
   <body>
-      <canvas id="myCanvas" width="1024" height="768"></canvas> 
+      <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas> 
+
+      <script>
+      var c=document.getElementById("myCanvas");
+      var ctx=c.getContext("2d");
+      ctx.fillStyle="#000000";
+      ctx.fillRect("0,0,150,75");
+      </script>
   </body>
 
 </html>
