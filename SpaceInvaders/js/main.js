@@ -1,65 +1,46 @@
-  var lastUpdate = Date.now();
-  var speed = 500.0;
-  var roundCount = 1;
-  var currentRound = 1;
-  var notOver = true;
+var roundCount = 1;
+var currentRound = 1;
+var notOver = true;
 
-  var tankPosX = 497;
-  var tankPosY= 730;
+// call the main function
+tank = new Object();
 
-  // call the main function
-  tank = new Object();
-  tank.posX = 497;
-  tank.posY = 730;
-  tank.onkeydown = tankKeyPress(key, tank);
+//initialize default position
+tank.posX = 497;
+tank.posY = 730;
 
-  main();
+tank.tankimg = new Image();
+tank.tankimg.src = "img/canon.png";
 
-
-  function main() {
-      //alert("main");
-      //run();
-      setInterval(draw, speed);
-  };
-  
-  /*function run() {
-    //alert("run");
-    var currentUpdate = Date.now();
-    var interval = (currentUpdate - lastUpdate) / speed;
-    
-    //update();
-    draw();
-    
-    lastUpdate = currentUpdate;
-    
-  };*/
-
-
-  function draw(){
-    //alert("draw");
-    var canvas = document.getElementById("myCanvas");
-    var context = canvas.getContext("2d");
-    context.fillStyle = "#000000";
-    context.fillRect(0,0,1024,768);
-
-    //creating tank
-    context.fillStyle = "#FF0000";
-    context.fillRect(tank.posX,tank.posY,30,20);
-  };
-
- 
-
-  function tankKeyPress(key, tank){
-    // left = 37, right = 39
-    if(key.keyCode == 37 && tank.posX>0){
-      tank.posX = tank.posX - 1;
-    } else if(key.keyCode == 37 && tank.posX <= 0){
-      //tank.posX = tank.posX;
-    } else if(key.keyCode == 39 && tank.posX<994){
-      tank.posX = tank.posX + 1;
-    } else if(key.keyCode == 37 && tank.posX >= 994){
-      //tank.posX = tank.posX;
-    }
+//Install keydown handler
+addEventListener("keydown", function tankKeyPress(e) {
+  // left = 37, right = 39
+  if(e.keyCode == 37 && tank.posX>0){
+    tank.posX = tank.posX - 32;
+  } else if(e.keyCode == 37 && tank.posX <= 0){
+    //tank.posX = tank.posX;
+  } else if(e.keyCode == 39 && tank.posX<832){
+    tank.posX = tank.posX + 32;
+  } else if(e.keyCode == 37 && tank.posX >= 994){
+    //tank.posX = tank.posX;
   }
+}, false);
 
-    main();
+
+function main() {
+    //run();
+    setInterval(draw, 1);
+};
+
+
+function draw(){
+  var canvas = document.getElementById("myCanvas");
+  var context = canvas.getContext("2d");
+  context.fillStyle = "#000000";
+  context.fillRect(0,0,1024,768);
+
+  //creating tank
+  context.drawImage(tank.tankimg, tank.posX, tank.posY);
+};
+
+main();
