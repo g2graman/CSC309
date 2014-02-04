@@ -87,7 +87,7 @@ function moveBullet(){
 	}
 	
 	// check if the bullet has hit an alien
-	if(bullet.posY - alien.posY < 10 && alien.alive == true){
+	if(bullet.posY - alien.posY < 58 && bullet.posX - alien.posX < 80 && alien.alive == true){
 		bullet.active = false;
 		bullet.bulletimg.src = "img/emptySpace.png";
 		updateScore();
