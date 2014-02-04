@@ -19,16 +19,21 @@ bullet.active = false;
 bullet.posX = 0;
 bullet.posY = 0;
 bullet.bulletimg = new Image();
-bullet.bulletimg.src = "img/bulletBlack.png";
+bullet.bulletimg.src = "img/emptySpace.png";
 bullet.alienHit = false;
 bullet.animatId = 0;
 
 // initialize alien
-alien.posX;
-alien.posY;
+alien.posX = 50;
+alien.posY = 50;
+alien.alienimg = new Image();
+alien.alienimg.src = "img/alien.png";
+alien.alive = true;
 
 // initialize score
 score.points = 0;
+  
+var scoreText = "Score: " + score.points;
 
 
 //Install keydown handler
@@ -77,13 +82,14 @@ function moveBullet(){
 	// check if we're at the top and stop the loop
 	if(bullet.posY <= 0){
 		bullet.active = false;
-		bullet.bulletimg.src = "img/bulletblack.png";
+		bullet.bulletimg.src = "img/emptySpace.png";
 		window.clearInterval(bullet.animateId);
 	}
 	
 	// check if the bullet has hit an alien
-	if(bullet.posY - alien.posY < 5){
+	if(bullet.posY - alien.posY < 10 && alien.alive == true){
 		bullet.active = false;
+		bullet.bulletimg.src = "img/emptySpace.png";
 		updateScore();
 		updateAlien();
 		window.clearInterval(bullet.animateId);
@@ -93,12 +99,15 @@ function moveBullet(){
 function updateScore(){
 	// update the score
 	score.points = score.points + 1;
-	var score = "Score: " + score.points;
-	context.fillText(score, 5, 5);
+	scoreText = "Score: " + score.points;
 }
 
 function updateAlien(){
 	// make alien inactive/disappear
+	alien.posX = 0;
+	alien.posY = 0;
+	alien.alienimg.src = "img/emptySpace.png";
+	alien.alive = false;
 }
 
 
@@ -107,6 +116,10 @@ function draw(){
   var context = canvas.getContext("2d");
   context.fillStyle = "#000000";
   context.fillRect(0,0,1024,768);
+  
+  context.font = '20pt Verdana';
+  context.fillStyle = 'red';
+  context.fillText(scoreText, 20, 30);
 
   //creating tank
   context.drawImage(tank.tankimg, tank.posX, tank.posY);
@@ -114,9 +127,9 @@ function draw(){
   // creating bullet
   context.drawImage(bullet.bulletimg, bullet.posX, bullet.posY);
   
-  // create score points
-  var score = "Score: " + score.points;
-  context.fillText(score, 5, 5);
+  // create alien
+  context.drawImage(alien.alienimg, alien.posX, alien.posY);
+  
 };
 
 main();
