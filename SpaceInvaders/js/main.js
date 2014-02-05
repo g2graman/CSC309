@@ -66,7 +66,7 @@ function alien(x, y) {
 	this.detect=function(bulletX, bulletY){
 		// check if the bullet has hit an alien
 		if(bulletY > 0 && bulletX > 0){
-			if(bulletY - this.posY < 58 && bulletX - this.posX < 80 && this.alive == true){
+			if(bulletY - this.posY < 58 && (bulletX - this.posX < 80 && bulletX > this.posX) && this.alive == true){
 				tank.canfire = true;
 				mybullet.active = false;
 				mybullet.bulletimg.src = "img/emptySpace.png";
@@ -80,12 +80,15 @@ function alien(x, y) {
 // initialize score
 score.points = 0;
 var scoreText = "Score: " + score.points;
-var enemies = []
+var enemies = [];
 
 //Add 3 monsters to the stack. Layout of monsters pending.
 enemies.push(new alien(50, 50));
 enemies.push(new alien(150, 50));
+enemies.push(new alien(550, 50));
 enemies.push(new alien(250, 50));
+enemies.push(new alien(350, 50));
+enemies.push(new alien(450, 50));
 
 //Install keydown handler
 addEventListener("keydown", function (e) {
