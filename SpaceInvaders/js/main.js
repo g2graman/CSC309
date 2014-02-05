@@ -1,43 +1,94 @@
+var context;
+var canvas;
+
+window.onload=function() {
+  canvas = document.getElementById("myCanvas");
+  context = canvas.getContext("2d");
+};
+
 var roundCount = 1;
 var currentRound = 1;
 var notOver = true;
+var ended = false;
 
 // call the main function
 tank = new Object();
-bullet = new Object();
-alien = new Object();
 score = new Object();
+
+function bullet (x, y, offset) {
+	// initialize bullet
+	this.active = true;
+	this.posX = 0;
+	this.posY = 0;
+	this.bulletimg = new Image();
+	this.bulletimg.src = "img/bulletPurple.png";
+	this.alienHit = false;
+
+	/* allow user to specify offset value so bullets can move
+	up or down.*/
+	this.offset = offset;
+
+	this.update=function (){
+		this.posY = this.posY + offset/3;
+		
+		// check if we're at the top and stop the loop
+		if(this.posY > 768){
+			this.active = false;
+			this.bulletimg.src = "img/emptySpace.png";
+		}
+	}
+};
 
 //initialize default position for tank
 tank.posX = 497;
 tank.posY = 730;
+tank.canfire = true;
 tank.tankimg = new Image();
 tank.tankimg.src = "img/canon.png";
 
-// initialize bullet
-bullet.active = false;
-bullet.posX = 0;
-bullet.posY = 0;
-bullet.bulletimg = new Image();
-bullet.bulletimg.src = "img/emptySpace.png";
-bullet.alienHit = false;
-bullet.animatId = 0;
+var mybullet = new bullet(tank.posX, tank.posY, -10);
 
-// initialize alien
-alien.posX = 50;
-alien.posY = 50;
-alien.alienimg = new Image();
-alien.alienimg.src = "img/alien.png";
-alien.alive = true;
+function alien(x, y) {
+	this.posX = x;
+	this.posY = y;
+	this.alienimg = new Image();
+	this.alienimg.src = "img/alien.png";
+	this.alive = true;
+
+	this.kill=function(){
+		// make alien inactive/disappear
+		this.posX = 0;
+		this.posY = 0;
+		this.alienimg.src = "img/emptySpace.png";
+		this.alive = false;
+	}
+
+	this.detect=function(bulletX, bulletY){
+		// check if the bullet has hit an alien
+		if(bulletY > 0 && bulletX > 0){
+			if(bulletY - this.posY < 58 && bulletX - this.posX < 80 && this.alive == true){
+				tank.canfire = true;
+				mybullet.active = false;
+				mybullet.bulletimg.src = "img/emptySpace.png";
+				incScore();
+				this.kill();
+			}
+		}
+	}
+};
 
 // initialize score
 score.points = 0;
-  
 var scoreText = "Score: " + score.points;
+var enemies = []
 
+//Add 3 monsters to the stack. Layout of monsters pending.
+enemies.push(new alien(50, 50));
+enemies.push(new alien(150, 50));
+enemies.push(new alien(250, 50));
 
 //Install keydown handler
-addEventListener("keydown", function tankKeyPress(e) {
+addEventListener("keydown", function (e) {
   // left = 37, right = 39
   if(e.keyCode == 37 && tank.posX>30){
     tank.posX = tank.posX - 32;
@@ -47,73 +98,43 @@ addEventListener("keydown", function tankKeyPress(e) {
     tank.posX = tank.posX + 32;
   } else if(e.keyCode == 37 && tank.posX >= 994){
     //tank.posX = tank.posX;
-  } else if(e.keyCode == 32 && bullet.active == false){
-  	//alert("#shots fired");
-  	if(bullet.active == false){
+  } else if(e.keyCode == 32 && tank.canfire){
 	  	shotsFired();
-	}
   }
 }, false);
 
 
 function main() {
-    //run();
-    setInterval(draw, 1);
+	if(notOver){
+		draw();
+	}
+
+	notOver = enemies.length > 0 && notOver;
+	
+	if(notOver == false && !ended) {
+		draw();
+		ended = true;
+
+		//Alert the user for gameover
+	}
 };
 
 function shotsFired() {
-	//alert("shots fired");
-	bullet.active = true;
-	
-	// draw bullet onto screen
-	bullet.posX = tank.posX + 25;
-	bullet.posY = tank.posY - 22;
-	bullet.bulletimg.src = "img/bulletPurple.png";
-	
-	// make bullet move upwards until it hits an alien OR reaches the top
-	bullet.animateId = window.setInterval( "moveBullet()", 30 );
-	
-}
+	tank.canfire = false;
+	mybullet.active = true;
+	mybullet.posX = tank.posX + 25;
+	mybullet.posY = tank.posY - 22;
+	mybullet.bulletimg.src = "img/bulletPurple.png";
+};
 
-// move the bullet upwards until it hits the target or reaches the top
-function moveBullet(){
-	bullet.posY = bullet.posY - 10;
-	
-	// check if we're at the top and stop the loop
-	if(bullet.posY <= 0){
-		bullet.active = false;
-		bullet.bulletimg.src = "img/emptySpace.png";
-		window.clearInterval(bullet.animateId);
-	}
-	
-	// check if the bullet has hit an alien
-	if(bullet.posY - alien.posY < 58 && bullet.posX - alien.posX < 80 && alien.alive == true){
-		bullet.active = false;
-		bullet.bulletimg.src = "img/emptySpace.png";
-		updateScore();
-		updateAlien();
-		window.clearInterval(bullet.animateId);
-	}
-}
-
-function updateScore(){
+function incScore(){
 	// update the score
 	score.points = score.points + 1;
 	scoreText = "Score: " + score.points;
-}
-
-function updateAlien(){
-	// make alien inactive/disappear
-	alien.posX = 0;
-	alien.posY = 0;
-	alien.alienimg.src = "img/emptySpace.png";
-	alien.alive = false;
-}
+};
 
 
 function draw(){
-  var canvas = document.getElementById("myCanvas");
-  var context = canvas.getContext("2d");
   context.fillStyle = "#000000";
   context.fillRect(0,0,1024,768);
   
@@ -121,15 +142,23 @@ function draw(){
   context.fillStyle = 'red';
   context.fillText(scoreText, 20, 30);
 
-  //creating tank
+  // creating tank
   context.drawImage(tank.tankimg, tank.posX, tank.posY);
   
-  // creating bullet
-  context.drawImage(bullet.bulletimg, bullet.posX, bullet.posY);
+  // draw my tank's bullet
+  mybullet.update();
+  tank.canfire = (mybullet.posY < 0 && !tank.canfire);
+  context.drawImage(mybullet.bulletimg, mybullet.posX, mybullet.posY);
   
-  // create alien
-  context.drawImage(alien.alienimg, alien.posX, alien.posY);
-  
+  enemies.forEach(function(alie) {
+  	alie.detect(mybullet.posX, mybullet.posY);
+  	context.drawImage(alie.alienimg, alie.posX, alie.posY);  
+  });
+
+  //Remove all dead aliens from the stack
+  enemies = enemies.filter(function(alie) {
+    return alie.alive;
+  });
 };
 
-main();
+setInterval(main, 1);
