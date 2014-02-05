@@ -1,5 +1,6 @@
 var context;
 var canvas;
+var rand = Math.floor(Math.random() * (100 - 1) + 1);
 
 window.onload=function() {
   canvas = document.getElementById("myCanvas");
@@ -18,8 +19,8 @@ score = new Object();
 function bullet (x, y, offset) {
 	// initialize bullet
 	this.active = true;
-	this.posX = 0;
-	this.posY = 0;
+	this.posX = x;
+	this.posY = y;
 	this.bulletimg = new Image();
 	this.bulletimg.src = "img/bulletPurple.png";
 	this.alienHit = false;
@@ -47,6 +48,8 @@ tank.tankimg = new Image();
 tank.tankimg.src = "img/canon.png";
 
 var mybullet = new bullet(tank.posX, tank.posY, -10);
+mybullet.active=false;
+var enemyshots = [];
 
 function alien(x, y) {
 	this.posX = x;
@@ -74,6 +77,20 @@ function alien(x, y) {
 				this.kill();
 			}
 		}
+	};
+
+	this.update=function() {
+
+	};
+
+	this.fire=function() {
+		var bull = new bullet(this.posX, this.posY, Math.floor(Math.random() * (10 - 7) + 7));
+		enemyshots.push(bull);
+	};
+
+	this.shouldfire=function(match) {
+		//Aliens shoot more often when some die as part of speed-up
+		return Math.floor(Math.random() * (enemies.length*300 - 1) + 1)==match;
 	}
 };
 
@@ -89,6 +106,14 @@ enemies.push(new alien(550, 50));
 enemies.push(new alien(250, 50));
 enemies.push(new alien(350, 50));
 enemies.push(new alien(450, 50));
+enemies.push(new alien(650, 50));
+enemies.push(new alien(50, 150));
+enemies.push(new alien(150, 150));
+enemies.push(new alien(250, 150));
+enemies.push(new alien(350, 150));
+enemies.push(new alien(450, 150));
+enemies.push(new alien(550, 150));
+enemies.push(new alien(650, 150));
 
 //Install keydown handler
 addEventListener("keydown", function (e) {
@@ -151,16 +176,33 @@ function draw(){
   // draw my tank's bullet
   mybullet.update();
   tank.canfire = (mybullet.posY < 0 && !tank.canfire);
-  context.drawImage(mybullet.bulletimg, mybullet.posX, mybullet.posY);
   
+  if(mybullet.active){
+  	context.drawImage(mybullet.bulletimg, mybullet.posX, mybullet.posY);
+  }
+
   enemies.forEach(function(alie) {
-  	alie.detect(mybullet.posX, mybullet.posY);
-  	context.drawImage(alie.alienimg, alie.posX, alie.posY);  
+  	if(mybullet.active){
+  		alie.detect(mybullet.posX, mybullet.posY);
+  	}
+  	context.drawImage(alie.alienimg, alie.posX, alie.posY); 
+  	if(alie.shouldfire(rand)) {
+  		alie.fire();
+  	} 
   });
 
   //Remove all dead aliens from the stack
   enemies = enemies.filter(function(alie) {
     return alie.alive;
+  });
+
+  enemyshots.forEach(function(bull) {
+  	bull.update();
+  	context.drawImage(bull.bulletimg, bull.posX, bull.posY);  
+  });
+
+  enemyshots = enemyshots.filter(function(bull) {
+    return bull.active;
   });
 };
 
