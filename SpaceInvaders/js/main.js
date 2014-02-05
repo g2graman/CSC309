@@ -1,6 +1,7 @@
 var context;
 var canvas;
-var rand = Math.floor(Math.random() * (100 - 1) + 1);
+var maxEnemies = 14;
+var rand = Math.floor(Math.random() * (maxEnemies*150 - 1) + 1);
 
 window.onload=function() {
   canvas = document.getElementById("myCanvas");
@@ -54,6 +55,7 @@ tank.tankimg.src = "img/canon.png";
 var mybullet = new bullet(tank.posX, tank.posY, -10);
 mybullet.active=false;
 var enemyshots = [];
+var enemies = [];
 
 function alien(x, y) {
 	this.posX = x;
@@ -79,6 +81,7 @@ function alien(x, y) {
 				mybullet.bulletimg.src = "img/emptySpace.png";
 				incScore();
 				this.kill();
+				rand = Math.floor(Math.random() * (enemies.length*150 - 1) + 1);
 			}
 		}
 	};
@@ -94,14 +97,13 @@ function alien(x, y) {
 
 	this.shouldfire=function(match) {
 		//Aliens shoot more often when some die as part of speed-up
-		return Math.floor(Math.random() * (enemies.length*300 - 1) + 1)==match;
+		return Math.floor(Math.random() * (enemies.length*150 - 1) + 1)==match;
 	}
 };
 
 // initialize score
 score.points = 0;
 var scoreText = "Score: " + score.points;
-var enemies = [];
 
 //Add 3 monsters to the stack. Layout of monsters pending.
 enemies.push(new alien(50, 50));
