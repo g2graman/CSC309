@@ -37,7 +37,11 @@ function bullet (x, y, offset) {
 			this.active = false;
 			this.bulletimg.src = "img/emptySpace.png";
 		}
-	}
+	};
+
+	this.hide=function () {
+		this.bulletimg.src = "img/emptySpace.png";
+	};
 };
 
 //initialize default position for tank
@@ -197,7 +201,12 @@ function draw(){
   });
 
   enemyshots.forEach(function(bull) {
-  	bull.update();
+  	if (notOver) {
+  		bull.update();
+  	} else {
+  		bull.hide();
+  	}
+
   	context.drawImage(bull.bulletimg, bull.posX, bull.posY);  
   });
 
