@@ -56,12 +56,6 @@ function bullet (x, y, offset) {
 	this.hide=function () {
 		this.bulletimg.src = "img/emptySpace.png";
 	};
-	
-	this.hitTank = function () {
-		if(this.posX < tank.posX - 80 && this.posY == tank.posY){
-			alert("hit the tank lost a life");
-		}
-	}
 };
 
 //initialize default position for tank
@@ -125,6 +119,7 @@ function alien(x, y) {
 			this.direction = 'r';
 		}
 	
+		// shift aliens left/right
 		if(this.direction == 'l'){
 			this.posX = this.posX + 1;
 		} else if(this.direction == 'r'){
@@ -266,7 +261,6 @@ function draw(){
   enemyshots.forEach(function(bull) {
   	if (notOver && bull.active) {
   		bull.update();
-  		bull.hitTank();
   	} else {
   		bull.hide();
   	}
