@@ -133,10 +133,15 @@ function alien(x, y) {
 		}
 		
 		// add new row
-		if(newRow >= 16 * enemies.length){
+		if(newRow >= 20 * enemies.length){
 			newRow = true;
 			addRowEnemies();
 			newRow = 0;
+		}
+		
+		// reached bottom, end of the game
+		if(this.posY + 30 >= tank.posY){
+			notOver = false;
 		}
 		
 	};
