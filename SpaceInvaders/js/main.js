@@ -12,6 +12,7 @@ var roundCount = 1;
 var currentRound = 1;
 var notOver = true;
 var ended = false;
+var newRow = true;
 
 // call the main function
 tank = new Object();
@@ -73,6 +74,7 @@ var mybullet = new bullet(tank.posX, tank.posY, -10);
 mybullet.active=false;
 var enemyshots = [];
 var enemies = [];
+var newRows = 0;
 
 function alien(x, y) {
 	this.posX = x;
@@ -80,6 +82,7 @@ function alien(x, y) {
 	this.origX = x;
 	this.origY = y;
 	this.direction = 'l';
+	this.newRow = 0;
 	this.alienimg = new Image();
 	this.alienimg.src = "img/alien.png";
 	this.alive = true;
@@ -106,17 +109,20 @@ function alien(x, y) {
 		}
 	};
 
+	// update alien movements, add new rows as needed
 	this.update=function() {
 		// extreme left
 		if(this.posX == this.origX){
 			this.posY = this.posY + 5;
 			this.direction = 'l';
+			newRow = newRow + 1;
 		}
 		
 		// extreme right
 		if(this.posX - this.origX == 100){
 			this.posY = this.posY + 5;
 			this.direction = 'r';
+			newRow = newRow + 1;
 		}
 	
 		// shift aliens left/right
@@ -125,6 +131,14 @@ function alien(x, y) {
 		} else if(this.direction == 'r'){
 			this.posX = this.posX - 1;
 		}
+		
+		// add new row
+		if(newRow >= 16 * enemies.length){
+			newRow = true;
+			addRowEnemies();
+			newRow = 0;
+		}
+		
 	};
 
 	this.fire=function() {
@@ -142,7 +156,7 @@ function alien(x, y) {
 score.points = 0;
 var scoreText = "Score: " + score.points;
 
-//Add 3 monsters to the stack. Layout of monsters pending.
+/*//Add 3 monsters to the stack. Layout of monsters pending.
 enemies.push(new alien(50, 50));
 enemies.push(new alien(150, 50));
 enemies.push(new alien(550, 50));
@@ -156,7 +170,7 @@ enemies.push(new alien(250, 150));
 enemies.push(new alien(350, 150));
 enemies.push(new alien(450, 150));
 enemies.push(new alien(550, 150));
-enemies.push(new alien(650, 150));
+enemies.push(new alien(650, 150));*/
 
 //Install keydown handler
 addEventListener("keydown", function (e) {
@@ -176,6 +190,8 @@ addEventListener("keydown", function (e) {
 
 
 function main() {
+	//setup();
+
 	if(notOver){
 		draw();
 	}
@@ -190,6 +206,7 @@ function main() {
 	}
 };
 
+// tank has fired a shot, create the bullet
 function shotsFired() {
 	tank.canfire = false;
 	mybullet.active = true;
@@ -198,6 +215,7 @@ function shotsFired() {
 	mybullet.bulletimg.src = "img/bulletPurple.png";
 };
 
+// increase the score
 function incScore(){
 	// update the score
 	score.points = score.points + 1;
@@ -205,8 +223,16 @@ function incScore(){
 };
 
 // the game is over, so we reset everything for another round
-function restart(){
-	
+function setup(){
+	addRowEnemies();
+}
+
+function addRowEnemies(){
+	//alert("addRowEnemies() function");
+	for(var i = 0; i < 8; i++){
+		enemies.push(new alien(50 + (i * 100), 50));
+	}
+	newRow = false;
 }
 
 
@@ -273,4 +299,5 @@ function draw(){
   });
 };
 
+setup();
 setInterval(main, 1);
