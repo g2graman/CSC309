@@ -133,7 +133,7 @@ function alien(x, y) {
 		}
 		
 		// add new row
-		if(newRow >= 20 * enemies.length){
+		if(newRow >= 15 * enemies.length){
 			newRow = true;
 			addRowEnemies();
 			newRow = 0;
