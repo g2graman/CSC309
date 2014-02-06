@@ -46,7 +46,7 @@ function bullet (x, y, offset) {
 			tank.livesText = "lives: " + tank.lives;
 			this.active = false;
 			if(tank.lives == 0){
-				tank.tankimg.src = "img/canonExplode.png";
+				//tank.tankimg.src = "img/canonExplode.png";
 				notOver = false;
 			}
 			
@@ -83,6 +83,9 @@ var enemies = [];
 function alien(x, y) {
 	this.posX = x;
 	this.posY = y;
+	this.origX = x;
+	this.origY = y;
+	this.direction = 'l';
 	this.alienimg = new Image();
 	this.alienimg.src = "img/alien.png";
 	this.alive = true;
@@ -110,7 +113,23 @@ function alien(x, y) {
 	};
 
 	this.update=function() {
-
+		// extreme left
+		if(this.posX == this.origX){
+			this.posY = this.posY + 5;
+			this.direction = 'l';
+		}
+		
+		// extreme right
+		if(this.posX - this.origX == 100){
+			this.posY = this.posY + 5;
+			this.direction = 'r';
+		}
+	
+		if(this.direction == 'l'){
+			this.posX = this.posX + 1;
+		} else if(this.direction == 'r'){
+			this.posX = this.posX - 1;
+		}
 	};
 
 	this.fire=function() {
@@ -227,7 +246,8 @@ function draw(){
   	context.drawImage(alie.alienimg, alie.posX, alie.posY); 
   	if(alie.shouldfire(rand)) {
   		alie.fire();
-  	} 
+  	}
+  	alie.update();
   });
   
   // show lives
