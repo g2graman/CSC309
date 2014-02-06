@@ -38,11 +38,30 @@ function bullet (x, y, offset) {
 			this.active = false;
 			this.bulletimg.src = "img/emptySpace.png";
 		}
+		
+		// check if we hit the tank
+		if(tank.posY - this.posY <= 10 && this.posX - tank.posX <= 80 && this.posX - tank.posX >= 0){
+			this.hide();
+			tank.lives = tank.lives - 1;
+			tank.livesText = "lives: " + tank.lives;
+			this.active = false;
+			if(tank.lives == 0){
+				tank.tankimg.src = "img/canonExplode.png";
+				notOver = false;
+			}
+			
+		}
 	};
 
 	this.hide=function () {
 		this.bulletimg.src = "img/emptySpace.png";
 	};
+	
+	this.hitTank = function () {
+		if(this.posX < tank.posX - 80 && this.posY == tank.posY){
+			alert("hit the tank lost a life");
+		}
+	}
 };
 
 //initialize default position for tank
@@ -51,6 +70,10 @@ tank.posY = 730;
 tank.canfire = true;
 tank.tankimg = new Image();
 tank.tankimg.src = "img/canon.png";
+tank.lives = 5;
+tank.livesText = "Lives: 3";
+tank.livesimg = new Image();
+tank.livesimg.src = "img/lives.png";
 
 var mybullet = new bullet(tank.posX, tank.posY, -10);
 mybullet.active=false;
@@ -167,8 +190,18 @@ function incScore(){
 	scoreText = "Score: " + score.points;
 };
 
+// the game is over, so we reset everything for another round
+function restart(){
+	
+}
+
 
 function draw(){
+	// check to see if the game is over
+	if(!notOver){
+		alert("game over!");
+	}
+
   context.fillStyle = "#000000";
   context.fillRect(0,0,1024,768);
   
@@ -196,6 +229,14 @@ function draw(){
   		alie.fire();
   	} 
   });
+  
+  // show lives
+  context.font = '20pt Verdana';
+  context.fillStyle = 'red';
+  context.fillText(tank.livesText, 800, 30);
+  /*for(var i = 0; i < tank.livesText; i++){
+  	context.drawImage(tank.livesimg, 840, 300);
+  }*/
 
   //Remove all dead aliens from the stack
   enemies = enemies.filter(function(alie) {
@@ -203,8 +244,9 @@ function draw(){
   });
 
   enemyshots.forEach(function(bull) {
-  	if (notOver) {
+  	if (notOver && bull.active) {
   		bull.update();
+  		bull.hitTank();
   	} else {
   		bull.hide();
   	}
