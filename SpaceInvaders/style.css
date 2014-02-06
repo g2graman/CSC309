@@ -1,0 +1,16 @@
+body{
+	background-color: #000000;
+	margin: 0px auto;
+	padding-top:10px;
+}
+
+#intro{
+	text-align:center;
+	vertical-align: center;
+	margin: 0px auto;
+}
+
+#myCanvas{
+	width: 1024px;
+	height:768px;
+}
