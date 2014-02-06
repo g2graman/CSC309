@@ -1,7 +1,5 @@
 var context;
 var canvas;
-var maxEnemies = 14;
-var rand = Math.floor(Math.random() * (maxEnemies*150 - 1) + 1);
 
 window.onload=function() {
   canvas = document.getElementById("myCanvas");
@@ -44,11 +42,21 @@ function bullet (x, y, offset) {
 		if(tank.posY - this.posY <= 10 && this.posX - tank.posX <= 80 && this.posX - tank.posX >= 0){
 			this.hide();
 			tank.lives = tank.lives - 1;
-			tank.livesText = "lives: " + tank.lives;
+			tank.livesText = "Lives: " + tank.lives;
 			this.active = false;
 			if(tank.lives == 0){
 				//tank.tankimg.src = "img/canonExplode.png";
-				notOver = false;
+				notOver = true;
+				context.fillStyle = "#000000";
+				context.fillRect(0,0,1024,768);
+				var ng=confirm("Click OK to start a new game!");
+				if (ng==true)
+				{
+					restart();
+				} else {
+					window.clearInterval(listener);
+					gameOver();
+				}
 			}
 			
 		}
@@ -66,7 +74,7 @@ tank.canfire = true;
 tank.tankimg = new Image();
 tank.tankimg.src = "img/canon.png";
 tank.lives = 5;
-tank.livesText = "Lives: 3";
+//tank.livesText = "Lives: " + tank.lives;
 tank.livesimg = new Image();
 tank.livesimg.src = "img/lives.png";
 
@@ -75,6 +83,7 @@ mybullet.active=false;
 var enemyshots = [];
 var enemies = [];
 var newRows = 0;
+var rand = Math.floor(Math.random() * (enemies.length*150 - 1) + 1);
 
 function alien(x, y) {
 	this.posX = x;
@@ -161,22 +170,6 @@ function alien(x, y) {
 score.points = 0;
 var scoreText = "Score: " + score.points;
 
-/*//Add 3 monsters to the stack. Layout of monsters pending.
-enemies.push(new alien(50, 50));
-enemies.push(new alien(150, 50));
-enemies.push(new alien(550, 50));
-enemies.push(new alien(250, 50));
-enemies.push(new alien(350, 50));
-enemies.push(new alien(450, 50));
-enemies.push(new alien(650, 50));
-enemies.push(new alien(50, 150));
-enemies.push(new alien(150, 150));
-enemies.push(new alien(250, 150));
-enemies.push(new alien(350, 150));
-enemies.push(new alien(450, 150));
-enemies.push(new alien(550, 150));
-enemies.push(new alien(650, 150));*/
-
 //Install keydown handler
 addEventListener("keydown", function (e) {
   // left = 37, right = 39
@@ -201,7 +194,8 @@ function main() {
 		draw();
 	}
 
-	notOver = enemies.length > 0 && notOver;
+	//notOver = enemies.length > 0 && notOver;
+	//Got rid of above line to not have repeated confirm box
 	
 	if(notOver == false && !ended) {
 		draw();
@@ -232,6 +226,32 @@ function setup(){
 	addRowEnemies();
 }
 
+function restart() {
+	roundCount = 1;
+	currentRound = 1;
+	notOver = true;
+	ended = false;
+	newRow = true;
+	tank.lives = 3;
+	enemies = [];
+	context.fillStyle = "#000000";
+	context.fillRect(0,0,1024,768);
+	setup();
+	tank.livesText = "Lives: " + tank.lives;
+	score.points = 0;
+	scoreText = "Score: " + score.points;
+}
+
+function gameOver () {
+	enemies = [];
+	bullets = [];
+	context.fillStyle = "#000000";
+	context.fillRect(0,0,1024,768);
+	scoreText = "";
+	tank.tankimg.src = "img/emptySpace.png";
+	
+}
+
 function addRowEnemies(){
 	//alert("addRowEnemies() function");
 	for(var i = 0; i < 8; i++){
@@ -244,7 +264,16 @@ function addRowEnemies(){
 function draw(){
 	// check to see if the game is over
 	if(!notOver){
-		alert("game over!");
+		context.fillStyle = "#000000";
+		context.fillRect(0,0,1024,768);
+		var newGame=confirm("Click OK to start a new game!");
+		if (newGame==true) {
+			restart();
+		}
+		else {
+			window.clearInterval(listener);
+			gameOver();
+		}
 	}
 
   context.fillStyle = "#000000";
@@ -279,10 +308,10 @@ function draw(){
   // show lives
   context.font = '20pt Verdana';
   context.fillStyle = 'red';
-  context.fillText(tank.livesText, 800, 30);
-  /*for(var i = 0; i < tank.livesText; i++){
-  	context.drawImage(tank.livesimg, 840, 300);
-  }*/
+  //context.fillText(tank.livesText, 800, 30);
+  for(var i = 0; i < tank.lives; i++){
+  	context.drawImage(tank.livesimg, 800+i*30, 10);
+  }
 
   //Remove all dead aliens from the stack
   enemies = enemies.filter(function(alie) {
@@ -305,4 +334,4 @@ function draw(){
 };
 
 setup();
-setInterval(main, 1);
+var listener = setInterval(main, 1);
