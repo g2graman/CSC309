@@ -211,7 +211,7 @@ function shotsFired() {
 	mybullet.active = true;
 	mybullet.posX = tank.posX + 25;
 	mybullet.posY = tank.posY - 22;
-	mybullet.bulletimg.src = "img/bulletPurple.png";
+	mybullet.bulletimg.src = "img/bulletBlue.png";
 };
 
 // increase the score
@@ -280,7 +280,7 @@ function draw(){
   context.fillRect(0,0,1024,768);
   
   context.font = '20pt Verdana';
-  context.fillStyle = 'red';
+  context.fillStyle = '#9d3737';
   context.fillText(scoreText, 20, 30);
 
   // creating tank
@@ -307,7 +307,7 @@ function draw(){
   
   // show lives
   context.font = '20pt Verdana';
-  context.fillStyle = 'red';
+  context.fillStyle = '#9d3737';
   //context.fillText(tank.livesText, 800, 30);
   for(var i = 0; i < tank.lives; i++){
   	context.drawImage(tank.livesimg, 800+i*30, 10);
