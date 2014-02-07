@@ -1,6 +1,6 @@
 CSC309H
-Aashni Shah | g2aashni
-Francesco Gramano | g2graman
+Aashni Shah | g2aashni | 999019663
+Francesco Gramano | g2graman | 999203767
 ============================
 
 SpaceInvaders
@@ -29,6 +29,3 @@ The tank is controlled by a real-world user through keyboard buttons. We have an
 We have some smaller functions such as shotsFired (to create a bullet fired by the tank), incScore (to increase the score if an alien has been hit), setup (part of the setup process), addRowEnemies creates a new row of enemies at the top of the game and finally the restart and gameOver functions. Our largest function is the draw function, which is constantly being called. The draw function is responsible for drawing the updated locations of the bullet, tank, scores, lives etc. It also performs checks to see if the bullets should be moving, and if aliens have been hit. 
 
 The game is run by creating a listener or setInterval that constantly calls the main function. The main function checks to make sure the game is not over, and then calls the draw function to update the positions of all the objects on the screen.
-
-Bugs and Stuff
---------------
