@@ -1,3 +1,4 @@
+/* creating the context and canvas */
 var context;
 var canvas;
 
@@ -6,16 +7,40 @@ window.onload=function() {
   context = canvas.getContext("2d");
 };
 
+/* creating variables for the game */
 var roundCount = 1;
 var currentRound = 1;
 var notOver = true;
 var ended = false;
 var newRow = true;
+var enemyshots = [];
+var enemies = [];
+var newRows = 0;
+var rand = Math.floor(Math.random() * (enemies.length*150 - 1) + 1);
 
-// call the main function
+/* create a tank and score object */
 tank = new Object();
 score = new Object();
 
+/* initialize default position for tank */
+tank.posX = 497;
+tank.posY = 730;
+tank.canfire = true;
+tank.tankimg = new Image();
+tank.tankimg.src = "img/canon.png";
+tank.lives = 5;
+tank.livesimg = new Image();
+tank.livesimg.src = "img/lives.png";
+
+/* initialize score */
+score.points = 0;
+var scoreText = "Score: " + score.points;
+
+/* initialize tank's bullet */
+var mybullet = new bullet(tank.posX, tank.posY, -10);
+mybullet.active=false;
+
+/* bullet functionality */
 function bullet (x, y, offset) {
 	// initialize bullet
 	this.active = true;
@@ -67,24 +92,7 @@ function bullet (x, y, offset) {
 	};
 };
 
-//initialize default position for tank
-tank.posX = 497;
-tank.posY = 730;
-tank.canfire = true;
-tank.tankimg = new Image();
-tank.tankimg.src = "img/canon.png";
-tank.lives = 5;
-//tank.livesText = "Lives: " + tank.lives;
-tank.livesimg = new Image();
-tank.livesimg.src = "img/lives.png";
-
-var mybullet = new bullet(tank.posX, tank.posY, -10);
-mybullet.active=false;
-var enemyshots = [];
-var enemies = [];
-var newRows = 0;
-var rand = Math.floor(Math.random() * (enemies.length*150 - 1) + 1);
-
+/* alien functionality */
 function alien(x, y) {
 	this.posX = x;
 	this.posY = y;
@@ -156,6 +164,7 @@ function alien(x, y) {
 	};
 
 	this.fire=function() {
+		// create a new bullet from the enemy
 		var bull = new bullet(this.posX, this.posY, Math.floor(Math.random() * (10 - 7) + 7));
 		enemyshots.push(bull);
 	};
@@ -166,11 +175,7 @@ function alien(x, y) {
 	}
 };
 
-// initialize score
-score.points = 0;
-var scoreText = "Score: " + score.points;
-
-//Install keydown handler
+/* keyboard handler */
 addEventListener("keydown", function (e) {
   // left = 37, right = 39
   if(e.keyCode == 37 && tank.posX>30){
@@ -186,26 +191,7 @@ addEventListener("keydown", function (e) {
   }
 }, false);
 
-
-function main() {
-	//setup();
-
-	if(notOver){
-		draw();
-	}
-
-	//notOver = enemies.length > 0 && notOver;
-	//Got rid of above line to not have repeated confirm box
-	
-	if(notOver == false && !ended) {
-		draw();
-		ended = true;
-
-		//Alert the user for gameover
-	}
-};
-
-// tank has fired a shot, create the bullet
+/* tank has fired a shot, create the bullet */
 function shotsFired() {
 	tank.canfire = false;
 	mybullet.active = true;
@@ -214,18 +200,18 @@ function shotsFired() {
 	mybullet.bulletimg.src = "img/bulletBlue.png";
 };
 
-// increase the score
+/* increase the score */
 function incScore(){
-	// update the score
 	score.points = score.points + 1;
 	scoreText = "Score: " + score.points;
 };
 
-// the game is over, so we reset everything for another round
+/* the game is over, so we reset everything for another round */
 function setup(){
 	addRowEnemies();
 }
 
+/* restart the game */
 function restart() {
 	roundCount = 1;
 	currentRound = 1;
@@ -242,6 +228,7 @@ function restart() {
 	scoreText = "Score: " + score.points;
 }
 
+/* game over */
 function gameOver () {
 	enemies = [];
 	bullets = [];
@@ -249,9 +236,9 @@ function gameOver () {
 	context.fillRect(0,0,1024,768);
 	scoreText = "";
 	tank.tankimg.src = "img/emptySpace.png";
-	
 }
 
+/* create a new row of enemies */
 function addRowEnemies(){
 	//alert("addRowEnemies() function");
 	for(var i = 0; i < 8; i++){
@@ -260,7 +247,7 @@ function addRowEnemies(){
 	newRow = false;
 }
 
-
+/* if game is not over, update score, tank, bullet */
 function draw(){
 	// check to see if the game is over
 	if(!notOver){
@@ -276,9 +263,11 @@ function draw(){
 		}
 	}
 
+  // creating black background for game
   context.fillStyle = "#000000";
   context.fillRect(0,0,1024,768);
   
+  // display score
   context.font = '20pt Verdana';
   context.fillStyle = '#9d3737';
   context.fillText(scoreText, 20, 30);
@@ -290,10 +279,12 @@ function draw(){
   mybullet.update();
   tank.canfire = (mybullet.posY < 0 && !tank.canfire);
   
+  // if the tank fired a bullet, update it's position
   if(mybullet.active){
   	context.drawImage(mybullet.bulletimg, mybullet.posX, mybullet.posY);
   }
 
+  // for every enemy, check if bullet hit and if we can fire
   enemies.forEach(function(alie) {
   	if(mybullet.active){
   		alie.detect(mybullet.posX, mybullet.posY);
@@ -305,7 +296,7 @@ function draw(){
   	alie.update();
   });
   
-  // show lives
+  // display number of lives left
   context.font = '20pt Verdana';
   context.fillStyle = '#9d3737';
   //context.fillText(tank.livesText, 800, 30);
@@ -318,20 +309,36 @@ function draw(){
     return alie.alive;
   });
 
+  // update aliens bullets depending on their location
   enemyshots.forEach(function(bull) {
   	if (notOver && bull.active) {
   		bull.update();
   	} else {
   		bull.hide();
   	}
-
   	context.drawImage(bull.bulletimg, bull.posX, bull.posY);  
   });
 
+  // track enemy shots
   enemyshots = enemyshots.filter(function(bull) {
     return bull.active;
   });
 };
 
+// call the setup function, then begin the rest of the game
 setup();
 var listener = setInterval(main, 1);
+
+/* main function */
+function main() {
+	if(notOver){
+		draw();
+	}
+	
+	if(notOver == false && !ended) {
+		draw();
+		ended = true;
+
+		//Alert the user for gameover
+	}
+};
