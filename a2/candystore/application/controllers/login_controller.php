@@ -12,8 +12,12 @@ class login_controller extends CI_Controller {
     		$this->load->view('login/login.php');
     }
     
-    function newForm() {
-	    	$this->load->view('product/newForm.php');
+    function loginForm() {
+	    	$this->load->view('login/loginForm.php');
+    }
+    
+    function validate() {
+    	echo "we're here!";
     }
     
 	function create() {
