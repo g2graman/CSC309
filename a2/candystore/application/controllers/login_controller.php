@@ -12,12 +12,50 @@ class login_controller extends CI_Controller {
     		$this->load->view('login/login.php');
     }
     
+    function admin() {
+    	$this->load->view('admin/index.php');
+    }
+    
     function loginForm() {
 	    	$this->load->view('login/loginForm.php');
     }
     
     function validate() {
-    	echo "we're here!";
+    	$login = $this->input->get_post('login');
+    	$password = $this->input->get_post('password');
+    	/*$this->load->library('form_validation');
+    	$this->form_validation->set_rules('login','Login','required|is_unique[login]');
+    	$this->form_validation->set_rules('password','Password','required');
+    	*/
+    	//if($this->form_validation->run() == true){
+    	
+    		$this->load->model('login_model');
+    		$this->load->model('customer');
+    		echo "login: ".$login;
+    		echo "pass: ".$password;
+    		$valid_customer = $valid_customer = $this->login_model->login_exists($login, $password);
+    		print_r($valid_customer);
+    		if($valid_customer != FALSE){
+    			echo "inside if";
+    			$product = new Product();
+    			echo "product";
+    			$customer = new Customer();
+    			echo "customer?";
+    			
+    			$customer->id = $valid_customer->id;
+    			$customer->first = $valid_customer->first;
+    			$customer->last = $valid_customer->last;
+    			$customer->login = $valid_customer->login;
+    			$customer->password = $valid_customer->password;
+    			$customer->email = $valid_customer->email;
+    			redirect('login_controller/admin', 'refresh');
+    			 
+    		} else {
+    			redirect('login_controller/index', 'refresh');
+    		}
+       //	}
+    	
+    	
     }
     
 	function create() {

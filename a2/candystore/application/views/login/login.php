@@ -5,9 +5,9 @@
 	
 	echo form_open('login_controller/validate');
 		
-	echo form_label('Username'); 
-	echo form_error('username');
-	echo form_input('username',set_value('username'),"required");
+	echo form_label('Login Username'); 
+	echo form_error('login');
+	echo form_input('login',set_value('login'),"required");
 
 	echo form_label('Password');
 	echo form_error('password');
