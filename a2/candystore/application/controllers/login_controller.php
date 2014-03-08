@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 class login_controller extends CI_Controller {
    
      
@@ -9,7 +11,12 @@ class login_controller extends CI_Controller {
     }
 
     function index() {
+    	if($this->session->userdata('logged_in')){
+    		$session_data = $this->session->userdata('logged_in');
+    		$this->load->view('admin/index.php');
+    	} else {
     		$this->load->view('login/login.php');
+    	}
     }
     
     function admin() {
@@ -31,23 +38,29 @@ class login_controller extends CI_Controller {
     	
     		$this->load->model('login_model');
     		$this->load->model('customer');
-    		echo "login: ".$login;
-    		echo "pass: ".$password;
     		$valid_customer = $valid_customer = $this->login_model->login_exists($login, $password);
-    		print_r($valid_customer);
-    		if($valid_customer != FALSE){
-    			echo "inside if";
+    		if($valid_customer != NULL){
+    			$this->load->library('session');
     			$product = new Product();
-    			echo "product";
     			$customer = new Customer();
-    			echo "customer?";
     			
+    			// create new customer object
     			$customer->id = $valid_customer->id;
     			$customer->first = $valid_customer->first;
     			$customer->last = $valid_customer->last;
     			$customer->login = $valid_customer->login;
     			$customer->password = $valid_customer->password;
     			$customer->email = $valid_customer->email;
+    			
+    			//store customer info into array
+    			$customer_array = array('id' => $customer->id,
+    									'first' => $customer->first,
+    									'last' => $customer->last,
+    									'login' => $customer->login,
+    									'email' => $customer->email);
+    			
+    			$this->session->set_userdata(array('id' => $customer->id, 'logged_in' => TRUE));
+    			$this->session->set_userdata($customer_array);
     			redirect('login_controller/admin', 'refresh');
     			 
     		} else {
@@ -55,6 +68,14 @@ class login_controller extends CI_Controller {
     		}
        //	}
     	
+    	
+    }
+    
+    function logout() {
+    	
+    	$this->session->unset_userdata('logged_in');
+    	session_destroy();
+    	redirect('login_controller', 'refresh');
     	
     }
     

@@ -32,18 +32,14 @@ class Login_model extends CI_Model {
 	}
 	
 	function login_exists($login, $password) {
-		echo "am i alive";
 		$query = $this->db->get_where('customer',array('login' => $login, 
 													'password' => $password));
 		if ($query->num_rows() > 0){
 			foreach ($query->result() as $row){
-				echo "am i alive again";
-				print_r($row);
 			      return $row;
 			}
 		}
 		
-		echo "i don't exist";
 		return FALSE;
 	}
 }
