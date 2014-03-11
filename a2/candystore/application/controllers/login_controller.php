@@ -209,6 +209,67 @@ class login_controller extends CI_Controller {
       $this->load->view('customer/browse.php', $data);
     }
 
+    /* function for checkout actions
+    function checkout(){
+      if($this->is_logged_in()){
+        $this->load->model('login_model');
+        $this->load->view('login/login.php');
+      } else {
+        $this->load->model('order_model');
+        $this-order_model->checkout();
+      }
+    }*/
+
+    function checkout(){
+      if($this->is_logged_in()){
+        echo 'yup';
+        $this->load->model('order_model');
+        echo 'loaded model';
+        $this->show_cart();
+        echo 'shown cart';
+        $this->collect_user_info();
+        $this->verify_user_info();
+        $this->process_order();
+        $this->display_receipt();
+        $this->email_receipt();
+      } else {
+        $data = array(
+          'error' => 'You are not currently logged in. Please login or create an account to continue.',
+          'prev' => 'login_controller/checkout'
+        );
+        $this->load->model('login_model');
+        $this->load->view('login/login.php', $data);
+      }
+    }
+
+
+
+
+      function show_cart(){
+        echo 'inside show_cart';
+      }
+
+      function collect_user_info(){
+        echo 'inside collect_user_info';
+      }
+
+      function verify_user_info(){
+        echo 'inside verify_user_info';
+      }
+
+      function process_order(){
+        echo 'inside process_order';
+      }
+
+      function display_receipt(){
+        echo 'inside display_receipt';
+      }
+
+      function email_receipt(){
+        echo 'inside email_receipt';
+      }
+
+
 
 
 
