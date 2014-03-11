@@ -1,0 +1,118 @@
+-- insert cookiesncream product --
+INSERT INTO product
+  (name, description, photo_url, price)
+  VALUES
+  ("Cookies and Cream", "Delicious oreo cookies chocolate", "images/product/cookiesncream.png", 12.34);
+
+-- insert gummies product --
+INSERT INTO product
+  (name, description, photo_url, price)
+  VALUES
+  ("Gummies", "Small gummy bears", "images/product/gummies.png", 34.45);
+
+-- insert kisses product --
+INSERT INTO product
+  (name, description, photo_url, price)
+  VALUES
+  ("Hershey Kisses", "Hershey Kisses are small and awesome", "images/product/kisses.jpg", 23.32);
+
+
+-- insert mnms product --
+INSERT INTO product
+  (name, description, photo_url, price)
+  VALUES
+  ("MnM's", "Not Smarties!", "images/product/mnms.jpg", 12.12);
+
+
+
+
+
+
+
+-- insert admin user --
+INSERT INTO customer
+  (id, first, last, login, password, email)
+  VALUES
+  (1, "admin", "account", "admin", "password", "admin@account.com");
+
+-- insert james bond user --
+INSERT INTO customer
+  (id, first, last, login, password, email)
+  VALUES
+  (7, "james", "bond", "james", "bond", "james@bond.com");
+
+-- insert howard wallowitz user --
+INSERT INTO customer
+  (id, first, last, login, password, email)
+  VALUES
+  (10, "howard", "wallowitz", "howard", "wallowitz", "howard@wallowitz.com");
+
+-- insert angelina jolie user --
+INSERT INTO customer
+  (id, first, last, login, password, email)
+  VALUES (100, "angelina", "jolie", "angelina", "jolie", "angelina@jolie.com");
+
+-- insert james bond order 1--
+-- (5) mnms, (3) gummies --
+INSERT INTO `candystore`.`order`
+  (`id`, `customer_id`, `order_date`, `order_time`, `total`, `creditcard_number`, `creditcard_month`, `creditcard_year`)
+  VALUES
+  ('01', '7', '2014-03-06', '14:00:00', '163.95', '1234567891234567', '04', '15');
+
+
+-- insert james bond order 2--
+-- (1) mnms, (1) gummies
+INSERT INTO `candystore`.`order`
+  (`id`, `customer_id`, `order_date`, `order_time`, `total`, `creditcard_number`, `creditcard_month`, `creditcard_year`)
+  VALUES
+  ('05', '7', '2014-03-12', '12:00:00', '46.57', '1234567891234567', '04', '15');
+
+
+-- insert angeline jolie order --
+-- (2) cookiesncream, (1) gummies
+INSERT INTO `candystore`.`order`
+  (`id`, `customer_id`, `order_date`, `order_time`, `total`, `creditcard_number`, `creditcard_month`, `creditcard_year`)
+  VALUES
+  ('06', '100', '2014-01-13', '10:00:00', '59.13', '4567234512343456', '02', '18');
+
+
+
+-- insert (5) mnms for james bond 1 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (1, 8, 5);
+
+-- insert (3) gummies for james bond 1 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (1, 6, 3);
+
+
+-- insert (1) gummies for james bond 2 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (5, 6, 1);
+
+
+-- insert (1) mnms for james bond 2 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (5, 8, 1);
+
+
+-- insert (1) gummies for angelina jolie 1 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (6, 6, 1);
+
+
+-- insert (2) cookiesncream for angelina jolie 1 --
+INSERT INTO `candystore`.`order_item`
+  (`order_id`, `product_id`, `quantity`)
+  VALUES
+  (6, 5, 2);
