@@ -25,8 +25,6 @@ class order_model extends CI_Model {
       echo 'no orders';
     }
 
-    return 'lol';
-
 
   }
 

@@ -198,6 +198,14 @@ class login_controller extends CI_Controller {
 
     }
 
+    /* this function lets use browse through all candy products */
+    function browse(){
+      $this->load->model('product_model');
+      $data = $this->product_model->browse_products();
+      echo $data;
+      //$this->load->view->('customer/browse.php', $data);
+    }
+
 
 
 

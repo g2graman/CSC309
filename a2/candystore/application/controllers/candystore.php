@@ -30,40 +30,40 @@ class CandyStore extends CI_Controller {
 	    	$this->load->view('product/newForm.php');
     }
 
-	function create() {
-		$this->load->library('form_validation');
-		$this->form_validation->set_rules('name','Name','required|is_unique[product.name]');
-		$this->form_validation->set_rules('description','Description','required');
-		$this->form_validation->set_rules('price','Price','required');
+    function create() {
+  		$this->load->library('form_validation');
+  		$this->form_validation->set_rules('name','Name','required|is_unique[product.name]');
+  		$this->form_validation->set_rules('description','Description','required');
+  		$this->form_validation->set_rules('price','Price','required');
 
-		$fileUploadSuccess = $this->upload->do_upload();
+  		$fileUploadSuccess = $this->upload->do_upload();
 
-		if ($this->form_validation->run() == true && $fileUploadSuccess) {
-			$this->load->model('product_model');
+  		if ($this->form_validation->run() == true && $fileUploadSuccess) {
+  			$this->load->model('product_model');
 
-			$product = new Product();
-			$product->name = $this->input->get_post('name');
-			$product->description = $this->input->get_post('description');
-			$product->price = $this->input->get_post('price');
+  			$product = new Product();
+  			$product->name = $this->input->get_post('name');
+  			$product->description = $this->input->get_post('description');
+  			$product->price = $this->input->get_post('price');
 
-			$data = $this->upload->data();
-			$product->photo_url = $data['file_name'];
+  			$data = $this->upload->data();
+  			$product->photo_url = $data['file_name'];
 
-			$this->product_model->insert($product);
+  			$this->product_model->insert($product);
 
-			//Then we redirect to the index page again
-			redirect('candystore/index', 'refresh');
-		}
-		else {
-			if ( !$fileUploadSuccess) {
-				$data['fileerror'] = $this->upload->display_errors();
-				$this->load->view('product/newForm.php',$data);
-				return;
-			}
+  			//Then we redirect to the index page again
+  			redirect('candystore/index', 'refresh');
+  		}
+  		else {
+  			if ( !$fileUploadSuccess) {
+  				$data['fileerror'] = $this->upload->display_errors();
+  				$this->load->view('product/newForm.php',$data);
+  				return;
+  			}
 
-			$this->load->view('product/newForm.php');
-		}
-	}
+  			$this->load->view('product/newForm.php');
+  		}
+  	}
 
 	function read($id) {
 		$this->load->model('product_model');
