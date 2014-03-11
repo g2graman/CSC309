@@ -37,20 +37,20 @@ class Product_model extends CI_Model {
 		$products = $query->result();
 		$browsing = "";
 		if($query->num_rows() > 0){
+			$browsing .= '<div class="row">';
 			foreach ($products as $product){
-				$browsing .= '<div class="row">';
 				  $browsing .= '<div class="col-sm-6 col-md-4">';
 				    $browsing .= '<div class="thumbnail">';
-				      $browsing .= '<img src="' . base_url() . $product->photo_url . '" alt="..." width="100px" height="100px">';
+				      $browsing .= '<img src="' . base_url() . $product->photo_url . '" alt="..." height="150px" width="150px">';
 				      $browsing .= '<div class="caption">';
 				        $browsing .= '<h3>' . $product->name .'</h3>';
 				        $browsing .= '<p>' . $product->description . '</p>';
-				        $browsing .= '<p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>';
+				        $browsing .= '<p><a href="#" class="btn btn-primary" role="button">Add to Order</a> <a href="#" class="btn btn-default" role="button">More Informaiton</a></p>';
 				      $browsing .= '</div>';
 				    $browsing .= '</div>';
 				  $browsing .= '</div>';
-				$browsing .= '</div>';
 			}
+			$browsing .= '</div>';
 		} else {
 			$browsing .= 'no products';
 		}

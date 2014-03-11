@@ -1,5 +1,5 @@
 <?php
 
-  echo "inside browse.php";
+  echo $browse_data;
 
 ?>
