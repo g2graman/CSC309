@@ -1,7 +1,8 @@
 <?php
 
 session_start();
-
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 class login_controller extends CI_Controller {
 
 
@@ -13,7 +14,11 @@ class login_controller extends CI_Controller {
     function index() {
     	if($this->session->userdata('logged_in')) {
     		$session_data = $this->session->userdata('logged_in');
-    		$this->load->view('admin/index.php');
+        if($this->admin_logged_in()){
+          $this->load->view('admin/index.php');
+        } else {
+          $this->load->view('customer/index.php');
+        }
     	} else {
     		$this->load->view('login/login.php');
     	}
@@ -66,8 +71,7 @@ class login_controller extends CI_Controller {
     									'first' => $customer->first,
     									'last' => $customer->last,
     									'login' => $customer->login,
-    									'email' => $customer->email,
-    									'admin' => TRUE);
+    									'email' => $customer->email);
 					$this->session->set_userdata(array('id' => $customer->id, 'logged_in' => TRUE));
 					$this->session->set_userdata($customer_array);
 					redirect('login_controller/admin', 'refresh');
@@ -76,8 +80,7 @@ class login_controller extends CI_Controller {
     									'first' => $customer->first,
     									'last' => $customer->last,
     									'login' => $customer->login,
-    									'email' => $customer->email,
-    									'admin' => FALSE);
+    									'email' => $customer->email);
 					$this->session->set_userdata(array('id' => $customer->id, 'logged_in' => TRUE));
 					$this->session->set_userdata($customer_array);
 	    		redirect('login_controller/customer', 'refresh');
@@ -190,7 +193,6 @@ class login_controller extends CI_Controller {
           $this->load->view('login/new_user.php');
         }
       } else {
-        echo 'OBEY THE RULES, MOFO';
         $this->load->view('login/new_user.php');
       }
 
@@ -201,6 +203,10 @@ class login_controller extends CI_Controller {
     /* this function lets use browse through all candy products */
     function browse(){
       $this->load->model('product_model');
+      $this->load->library('session');
+      if(!isset($this->session->userdata['total'])){
+        $this->session->set_userdata(array('total' => 0));
+      }
       $browse_output = $this->product_model->browse_products();
       $data = array('browse_data' => $browse_output);
       //echo $data;
@@ -209,29 +215,20 @@ class login_controller extends CI_Controller {
       $this->load->view('customer/browse.php', $data);
     }
 
-    /* function for checkout actions
     function checkout(){
       if($this->is_logged_in()){
-        $this->load->model('login_model');
-        $this->load->view('login/login.php');
-      } else {
         $this->load->model('order_model');
-        $this-order_model->checkout();
-      }
-    }*/
-
-    function checkout(){
-      if($this->is_logged_in()){
-        echo 'yup';
-        $this->load->model('order_model');
-        echo 'loaded model';
-        $this->show_cart();
-        echo 'shown cart';
-        $this->collect_user_info();
-        $this->verify_user_info();
-        $this->process_order();
-        $this->display_receipt();
-        $this->email_receipt();
+        $this->load->library('session');
+        if(!isset($this->session->userdata['total'])){
+          $this->session->set_userdata(array('total' => 0));
+        }
+        $this->load->view('layout/header.php');
+        $this->show();
+        //$this->collect_user_info();
+        //$this->verify_user_info();
+        //$this->process_order();
+        //$this->display_receipt();
+        //$this->email_receipt();
       } else {
         $data = array(
           'error' => 'You are not currently logged in. Please login or create an account to continue.',
@@ -242,23 +239,78 @@ class login_controller extends CI_Controller {
       }
     }
 
+    function show() {
+      $this->load->model('product_model');
+      $show_output = $this->product_model->show_cart();
+      $data = array('show_output' => $show_output);
+      $this->load->view('layout/header.php');
+      $this->load->view('customer/checkout.php', $data);
+    }
 
+      function add_to_cart() {
+        $product_id = $this->uri->segment(3);
+        $this->load->library('session');
 
+        if(isset($this->session->userdata[$product_id])){
+          $newValue = $this->session->userdata[$product_id] + 1;
+          $this->session->set_userdata(array($product_id => $newValue));
+        } else {
+          $this->session->set_userdata(array($product_id => 1));
+        }
 
-      function show_cart(){
-        echo 'inside show_cart';
+        $this->load->model('product_model');
+        $product_info = $this->product_model->getPrice($product_id);
+
+        $old_total = $this->session->userdata['total'];
+        $this->session->set_userdata(array('total' => $old_total + $product_info->price));
+
+        $this->browse();
       }
 
-      function collect_user_info(){
-        echo 'inside collect_user_info';
+      function remove_from_cart($product_id) {
+        $product_id = $this->uri->segment(3);
+        $this->load->library('session');
+
+        $this->load->model('product_model');
+        $product_info = $this->product_model->getPrice($product_id);
+
+        if(isset($this->session->userdata[$product_id])) {
+          if($this->session->userdata[$product_id] >= 1) {
+            $newValue = $this->session->userdata[$product_id] - 1;
+            $this->session->set_userdata(array($product_id => $newValue));
+            $old_total = $this->session->userdata['total'];
+            $this->session->set_userdata(array('total' => $old_total - $product_info->price));
+          }
+        }
+
+        $this->browse();
       }
+
 
       function verify_user_info(){
-        echo 'inside verify_user_info';
-      }
+        $userInfo['cnum'] = $this->input->get_post('cnum');
+        $userInfo['expmonth'] = $this->input->get_post('expmonth');
+        $userInfo['expyear'] = $this->input->get_post('expyear');
 
-      function process_order(){
-        echo 'inside process_order';
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('cnum','Credit Card Number','required|max_length[16]|min_length[16]');
+        $this->form_validation->set_rules('expmonth','Expiration Month','required|integer|min_length[2]|max_length[2]');
+        $this->form_validation->set_rules('expyear','Expiration Year','required|integer|min_length[4]|max_length[4]');
+
+        if($this->form_validation->run() == true){
+          $this->load->model('product_model');
+          if($this->product_model->validate_new_order_info($userInfo)){
+            $this->product_model->process_order($userInfo);
+            $this->display_receipt();
+            $this->email_receipt();
+          } else {
+            echo 'Error: An account with your login or email already exists.';
+            //$this->load->view('login/new_user.php');
+          }
+        } else {
+          $data = array('error' => 'You did not correctly fill out your credit card information.');
+          $this->load->view('customer/checkout.php', $data);
+        }
       }
 
       function display_receipt(){
