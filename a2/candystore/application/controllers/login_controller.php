@@ -207,6 +207,10 @@ class login_controller extends CI_Controller {
       if(!isset($this->session->userdata['total'])){
         $this->session->set_userdata(array('total' => 0));
       }
+      if(!isset($this->session->userdata['total_quantity'])){
+      	$this->session->set_userdata(array('total_quantity' => 0));
+      }
+      
       $browse_output = $this->product_model->browse_products();
       $data = array('browse_data' => $browse_output);
       //echo $data;
@@ -221,6 +225,9 @@ class login_controller extends CI_Controller {
         $this->load->library('session');
         if(!isset($this->session->userdata['total'])){
           $this->session->set_userdata(array('total' => 0));
+        }
+        if(!isset($this->session->userdata['total_quantity'])){
+        	$this->session->set_userdata(array('total_quantity' => 0));
         }
         $this->load->view('layout/header.php');
         $this->show();
@@ -262,8 +269,9 @@ class login_controller extends CI_Controller {
         $product_info = $this->product_model->getPrice($product_id);
 
         $old_total = $this->session->userdata['total'];
+        $old_quant = $this->session->userdata['total_quantity'];
         $this->session->set_userdata(array('total' => $old_total + $product_info->price));
-
+        $this->session->set_userdata(array('total_quantity' => $old_quant + 1));
         $this->browse();
       }
 
@@ -278,9 +286,16 @@ class login_controller extends CI_Controller {
           if($this->session->userdata[$product_id] >= 1) {
             $newValue = $this->session->userdata[$product_id] - 1;
             $this->session->set_userdata(array($product_id => $newValue));
-            $old_total = $this->session->userdata['total'];
-            $this->session->set_userdata(array('total' => $old_total - $product_info->price));
-          }
+            $old_quant = $this->session->userdata['total_quantity'];
+            $this->session->set_userdata(array('total_quantity' => $old_quant - 1));
+            
+            if ($this->session->userdata['total_quantity'] <= 0){
+            	$this->session->set_userdata(array('total' => 0));
+            } else {
+            	$old_total = $this->session->userdata['total'];
+            	$this->session->set_userdata(array('total' => $old_total - $product_info->price));
+            }
+           }
         }
 
         $this->browse();
