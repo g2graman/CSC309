@@ -316,8 +316,8 @@ class login_controller extends CI_Controller {
           $this->load->model('product_model');
           if($this->product_model->validate_new_order_info($userInfo)){
             $order_id = $this->product_model->process_order($userInfo);
-            $this->display_receipt($order_id);
-            $this->email_receipt();
+            $receipt_info = $this->display_receipt($order_id);
+            $this->email_receipt($order_id, $receipt_info);
           } else {
             echo 'Error: An account with your login or email already exists.';
             //$this->load->view('login/new_user.php');
@@ -335,10 +335,36 @@ class login_controller extends CI_Controller {
         $data = array('receipt_output' => $receipt_output);
         $this->load->view('layout/header.php');
         $this->load->view('customer/receipt.php', $data);
+        return $receipt_output;
       }
 
-      function email_receipt(){
-        echo 'inside email_receipt';
+      function email_receipt($order_id, $receipt_info){
+      	echo 'inside email_receipt';
+      	$this->load->library('email');
+      	$this->load->library('session');
+      	$config['protocol'] = 'smtp';
+      	$config['mailpath'] = '/usr/sbin/sendmail';
+      	$config['charset'] = "utf-8";
+      	$config['smtp_host'] = 'ssl://smtp.gmail.com';
+      	$config['smtp_user'] = 'inthemorningtabed@gmail.com';
+      	$config['smtp_pass'] = '2013cssu2014';
+      	$config['smtp_port'] = '465';
+      	$config['mailtype'] = 'html';
+      	$config['newline'] = "\r\n";
+
+
+      	$this->email->initialize($config);
+      	$this->email->from('inthemorningtabed@gmail.com', 'Troy Abed');
+      	$email_name = $this->session->userdata['email'];
+      	$this->email->to('inthemorningtabed@gmail.com');
+      	$this->email->subject('Receipt #'.$order_id);
+      	$this->email->message($receipt_info);
+      	if($this->email->send()) {
+      		echo 'true<br>';
+      	} else {
+      		echo 'false<br>';
+      	}
+        echo $this->email->print_debugger();
       }
 
 
