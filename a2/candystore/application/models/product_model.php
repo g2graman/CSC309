@@ -150,6 +150,8 @@ class Product_model extends CI_Model {
 																							'quantity' => $this->session->userdata[$product->id]));
 			}
 		}
+
+		return $order_id;
 	}
 
 }

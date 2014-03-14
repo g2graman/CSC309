@@ -210,7 +210,7 @@ class login_controller extends CI_Controller {
       if(!isset($this->session->userdata['total_quantity'])){
       	$this->session->set_userdata(array('total_quantity' => 0));
       }
-      
+
       $browse_output = $this->product_model->browse_products();
       $data = array('browse_data' => $browse_output);
       //echo $data;
@@ -288,7 +288,7 @@ class login_controller extends CI_Controller {
             $this->session->set_userdata(array($product_id => $newValue));
             $old_quant = $this->session->userdata['total_quantity'];
             $this->session->set_userdata(array('total_quantity' => $old_quant - 1));
-            
+
             if ($this->session->userdata['total_quantity'] <= 0){
             	$this->session->set_userdata(array('total' => 0));
             } else {
@@ -315,8 +315,8 @@ class login_controller extends CI_Controller {
         if($this->form_validation->run() == true){
           $this->load->model('product_model');
           if($this->product_model->validate_new_order_info($userInfo)){
-            $this->product_model->process_order($userInfo);
-            $this->display_receipt();
+            $order_id = $this->product_model->process_order($userInfo);
+            $this->display_receipt($order_id);
             $this->email_receipt();
           } else {
             echo 'Error: An account with your login or email already exists.';
@@ -328,8 +328,13 @@ class login_controller extends CI_Controller {
         }
       }
 
-      function display_receipt(){
+      function display_receipt($order_id){
         echo 'inside display_receipt';
+        $this->load->model('order_model');
+        $receipt_output = $this->order_model->create_receipt($order_id);
+        $data = array('receipt_output' => $receipt_output);
+        $this->load->view('layout/header.php');
+        $this->load->view('customer/receipt.php', $data);
       }
 
       function email_receipt(){

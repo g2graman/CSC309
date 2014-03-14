@@ -44,14 +44,14 @@
 | The $active_record variables lets you determine whether or not to load
 | the active record class
 */
-  
+
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'bungle07.cs.toronto.edu';
-$db['default']['username'] = 'g2aashni';
-$db['default']['password'] = '75423739';
-$db['default']['database'] = 'g2aashni';  
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = 'root';
+$db['default']['database'] = 'candystore';  
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
