@@ -329,7 +329,6 @@ class login_controller extends CI_Controller {
       }
 
       function display_receipt($order_id){
-        echo 'inside display_receipt';
         $this->load->model('order_model');
         $receipt_output = $this->order_model->create_receipt($order_id);
         $data = array('receipt_output' => $receipt_output);
@@ -339,9 +338,7 @@ class login_controller extends CI_Controller {
       }
 
       function email_receipt($order_id, $receipt_info){
-      	echo 'inside email_receipt';
       	$this->load->library('email');
-      	$this->load->library('session');
       	$config['protocol'] = 'smtp';
       	$config['mailpath'] = '/usr/sbin/sendmail';
       	$config['charset'] = "utf-8";
@@ -353,18 +350,17 @@ class login_controller extends CI_Controller {
       	$config['newline'] = "\r\n";
 
 
+        $this->load->library('session');
+        $this->load->model('admin');
+
+        $admin_info = $this->admin->get_admin_info();
+
       	$this->email->initialize($config);
-      	$this->email->from('inthemorningtabed@gmail.com', 'Troy Abed');
-      	$email_name = $this->session->userdata['email'];
-      	$this->email->to('inthemorningtabed@gmail.com');
+      	$this->email->from($admin_info->email, $admin_info->first . ' ' . $admin_info->last);
+      	$this->email->to($this->session->userdata['email']);
       	$this->email->subject('Receipt #'.$order_id);
       	$this->email->message($receipt_info);
-      	if($this->email->send()) {
-      		echo 'true<br>';
-      	} else {
-      		echo 'false<br>';
-      	}
-        echo $this->email->print_debugger();
+      	return $this->email->send();
       }
 
 
