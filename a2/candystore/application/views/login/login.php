@@ -1,13 +1,11 @@
 <h2>Login</h2>
 
 <?php
-	echo "<!-- <p>" . anchor('candystore/index','Back') . "</p> -->";
-
 	if(isset($error)){
 		echo $error;
 	}
 
-	echo form_open('login_controller/validate');
+	echo form_open('login/validate');
 
 	echo form_label('Login Username');
 	echo form_error('login');
@@ -20,7 +18,7 @@
 	echo form_submit('submit', 'Login');
 	echo form_close();
 
-	echo '<a href=' . base_url() .'login_controller/create_user>Create User</a>';
+	echo '<a href=' . base_url() .'login/create_user>Create User</a>';
 	echo '<br>';
-	echo '<a href=' . base_url() .'login_controller/browse>Browse Candy</a>';
+	echo '<a href=' . base_url() .'login/browse>Browse Candy</a>';
 ?>

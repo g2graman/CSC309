@@ -1,1 +1,1 @@
-<a href=<?php echo '"'.base_url().'/login_controller"'; ?>> You fucked up. </a>
+<a href=<?php echo '"'.base_url().'/login"'; ?>> You fucked up. </a>

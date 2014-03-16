@@ -10,16 +10,8 @@
 
 	echo "<br><br>";
 
-?>
+	echo '<a href="'. base_url() .'products/index">Product Management</a><br>';
+	echo '<a href="'. base_url() .'admin/all_orders">Display All Orders</a><br>';
+	echo '<a href="'. base_url() .'admin/mass_delete">Delete Customer and Order Information</a><br>';
 
-<ul>
-	<li>
-		<a href="product_management">Product Management</a>
-	</li>
-	<li>
-		<a href="all_orders">Display All Orders</a>
-	</li>
-	<li>
-		<a href="mass_delete">Delete Customer and Order Information</a>
-	</li>
-</ul>
+?>

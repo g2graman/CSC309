@@ -6,7 +6,7 @@
     echo $show_output;
   }
 
-  echo form_open('login_controller/verify_user_info');
+  echo form_open('checkout/verify_user_info');
 
   echo form_label('Credit Card Number');
   echo form_error('cnum');
@@ -29,5 +29,5 @@
   echo form_submit('submit', 'Submit order');
   echo form_close();
 
-  echo '<a href=' . base_url() .'/login_controller>Return</a>';
+  echo '<a href=' . base_url() .'/login>Return</a>';
 ?>

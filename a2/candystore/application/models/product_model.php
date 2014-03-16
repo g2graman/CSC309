@@ -51,8 +51,8 @@ class Product_model extends CI_Model {
 				      $browsing .= '<div class="caption">';
 				        $browsing .= '<h3>' . $product->name .'</h3>';
 				        $browsing .= '<p>' . $product->description . '</p>';
-				        $browsing .= '<p><a href="' . base_url() .'login_controller/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>'
-									. '<a href="' . base_url() .'login_controller/remove_from_cart/'.$product->id.'" class="btn btn-default" role="button">Remove From Cart</a>';
+				        $browsing .= '<p><a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>'
+									. '<a href="' . base_url() .'cart/remove_from_cart/'.$product->id.'" class="btn btn-default" role="button">Remove From Cart</a>';
 								if(isset($this->session->userdata[$product->id])){
 									$browsing .= '<a href="#" class="btn btn-default" role="button">'. $this->session->userdata[$product->id] .'</a></p>';
 								} else {

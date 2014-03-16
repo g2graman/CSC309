@@ -10,6 +10,6 @@
 
 	echo '<br><br>';
 
-	echo '<a href="browse">Browse Candy</a>';
+	echo '<a href="'. base_url() . 'cart/browse">Browse Candy</a>';
 
 ?>

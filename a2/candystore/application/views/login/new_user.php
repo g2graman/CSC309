@@ -1,7 +1,7 @@
 <h2>Create a New Account</h2>
 
 <?php
-  echo form_open('login_controller/new_user');
+  echo form_open('login/new_user');
 
   echo form_label('First Name');
   echo form_error('first');
@@ -36,5 +36,5 @@
   echo form_submit('submit', 'Create New Account');
   echo form_close();
 
-  echo '<a href=' . base_url() .'/login_controller>Return</a>';
+  echo '<a href=' . base_url() .'/login>Return</a>';
 ?>

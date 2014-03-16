@@ -4,6 +4,6 @@
 
   echo $browse_data;
 
-  echo '<a href=' . base_url() .'login_controller/checkout>Checkout</a>';
+  echo '<a href=' . base_url() .'cart/checkout>Checkout</a>';
 
 ?>

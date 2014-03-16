@@ -1,5 +1,7 @@
 <?php
 
+/*
+
 session_start();
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
@@ -23,6 +25,8 @@ class login_controller extends CI_Controller {
     		$this->load->view('login/login.php');
     	}
     }
+
+    /*
 
     function admin() {
       if($this->admin_logged_in()) {
@@ -129,7 +133,7 @@ class login_controller extends CI_Controller {
         /*$this->load->model('order_model');
         $data['order_history'] = $this->order_model->order_history();
         $this->load->view('layout/header.php');
-        $this->load->view('admin/all_orders.php'); */
+        $this->load->view('admin/all_orders.php');
       } else {
         redirect('login_controller/index', 'refresh');
       }
@@ -157,11 +161,13 @@ class login_controller extends CI_Controller {
         /*$this->load->model('order_model');
         $data['order_history'] = $this->order_model->order_history();
         $this->load->view('layout/header.php');
-        $this->load->view('admin/all_orders.php'); */
+        $this->load->view('admin/all_orders.php');
       } else {
         redirect('login_controller/index', 'refresh');
       }
     }
+
+    
 
     function create_user(){
       $this->load->view('login/new_user.php');
@@ -200,106 +206,6 @@ class login_controller extends CI_Controller {
 
     }
 
-    /* this function lets use browse through all candy products */
-    function browse(){
-      $this->load->model('product_model');
-      $this->load->library('session');
-      if(!isset($this->session->userdata['total'])){
-        $this->session->set_userdata(array('total' => 0));
-      }
-      if(!isset($this->session->userdata['total_quantity'])){
-      	$this->session->set_userdata(array('total_quantity' => 0));
-      }
-
-      $browse_output = $this->product_model->browse_products();
-      $data = array('browse_data' => $browse_output);
-      //echo $data;
-      //$this->load->view->('customer/browse.php');
-      $this->load->view('layout/header.php');
-      $this->load->view('customer/browse.php', $data);
-    }
-
-    function checkout(){
-      if($this->is_logged_in()){
-        $this->load->model('order_model');
-        $this->load->library('session');
-        if(!isset($this->session->userdata['total'])){
-          $this->session->set_userdata(array('total' => 0));
-        }
-        if(!isset($this->session->userdata['total_quantity'])){
-        	$this->session->set_userdata(array('total_quantity' => 0));
-        }
-        $this->load->view('layout/header.php');
-        $this->show();
-        //$this->collect_user_info();
-        //$this->verify_user_info();
-        //$this->process_order();
-        //$this->display_receipt();
-        //$this->email_receipt();
-      } else {
-        $data = array(
-          'error' => 'You are not currently logged in. Please login or create an account to continue.',
-          'prev' => 'login_controller/checkout'
-        );
-        $this->load->model('login_model');
-        $this->load->view('login/login.php', $data);
-      }
-    }
-
-    function show() {
-      $this->load->model('product_model');
-      $show_output = $this->product_model->show_cart();
-      $data = array('show_output' => $show_output);
-      $this->load->view('layout/header.php');
-      $this->load->view('customer/checkout.php', $data);
-    }
-
-      function add_to_cart() {
-        $product_id = $this->uri->segment(3);
-        $this->load->library('session');
-
-        if(isset($this->session->userdata[$product_id])){
-          $newValue = $this->session->userdata[$product_id] + 1;
-          $this->session->set_userdata(array($product_id => $newValue));
-        } else {
-          $this->session->set_userdata(array($product_id => 1));
-        }
-
-        $this->load->model('product_model');
-        $product_info = $this->product_model->getPrice($product_id);
-
-        $old_total = $this->session->userdata['total'];
-        $old_quant = $this->session->userdata['total_quantity'];
-        $this->session->set_userdata(array('total' => $old_total + $product_info->price));
-        $this->session->set_userdata(array('total_quantity' => $old_quant + 1));
-        $this->browse();
-      }
-
-      function remove_from_cart($product_id) {
-        $product_id = $this->uri->segment(3);
-        $this->load->library('session');
-
-        $this->load->model('product_model');
-        $product_info = $this->product_model->getPrice($product_id);
-
-        if(isset($this->session->userdata[$product_id])) {
-          if($this->session->userdata[$product_id] >= 1) {
-            $newValue = $this->session->userdata[$product_id] - 1;
-            $this->session->set_userdata(array($product_id => $newValue));
-            $old_quant = $this->session->userdata['total_quantity'];
-            $this->session->set_userdata(array('total_quantity' => $old_quant - 1));
-
-            if ($this->session->userdata['total_quantity'] <= 0){
-            	$this->session->set_userdata(array('total' => 0));
-            } else {
-            	$old_total = $this->session->userdata['total'];
-            	$this->session->set_userdata(array('total' => $old_total - $product_info->price));
-            }
-           }
-        }
-
-        $this->browse();
-      }
 
 
       function verify_user_info(){
@@ -366,5 +272,5 @@ class login_controller extends CI_Controller {
 
 
 
-
+*/
 }
