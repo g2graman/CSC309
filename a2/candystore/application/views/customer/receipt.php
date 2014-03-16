@@ -17,4 +17,6 @@
     echo 'Error Obtaining Receipt';
   }
 
+  echo '<a href="' . base_url() . 'products/browse">Browse more products</a>';
+
 ?>

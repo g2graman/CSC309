@@ -24,4 +24,6 @@
 
 	echo form_submit('submit', 'Save');
 	echo form_close();
+
+	echo '<a href="' . base_url() . 'admin/index">Return Home</a>';
 ?>

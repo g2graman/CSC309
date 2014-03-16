@@ -1,1 +1,1 @@
-<a href="admin"> Delete successful. Click to continue. </a>
+<a href="' . base_url() . 'login/admin"> Delete successful. Click to continue. </a>

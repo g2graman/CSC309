@@ -1,6 +1,6 @@
 <?php
 
-  echo '<a href="logout">logout</a>';
+  echo '<a href="' . base_url() . 'login/logout">logout</a>';
 
   echo "<br><br>";
 

@@ -33,4 +33,6 @@
 
 	echo form_submit('submit', 'Create');
 	echo form_close();
+
+	echo '<a href="' . base_url() . 'login/index">Return Home</a>';
 ?>

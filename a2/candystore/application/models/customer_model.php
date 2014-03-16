@@ -15,7 +15,6 @@ class customer_model extends CI_Model {
   }
 
   function create_user($userInfo){
-    $this->load->model('customer');
     $this->db->insert('customer', $userInfo);
   }
 

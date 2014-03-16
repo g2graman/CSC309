@@ -10,7 +10,7 @@
 			echo "<td>" . $product->name . "</td>";
 			echo "<td>" . $product->description . "</td>";
 			echo "<td>" . $product->price . "</td>";
-			echo "<td><img src='" . base_url() . "images/product/" . $product->photo_url . "' width='100px' /></td>";
+			echo "<td><img src='" . base_url() . $product->photo_url . "' width='100px' /></td>";
 
 			echo "<td>" . anchor("products/delete/$product->id",'Delete',"onClick='return confirm(\"Do you really want to delete this record?\");'") . "</td>";
 			echo "<td>" . anchor("products/editForm/$product->id",'Edit') . "</td>";
@@ -19,4 +19,6 @@
 			echo "</tr>";
 		}
 		echo "<table>";
+
+		echo '<a href="' . base_url() . 'login/index">Return Home</a>';
 ?>

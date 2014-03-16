@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
+
 class Cart extends CI_Controller {
 
     function index() {
@@ -77,51 +80,53 @@ class Cart extends CI_Controller {
       $this->load->view('customer/checkout.php', $data);
     }
 
-      function add_to_cart() {
-        $product_id = $this->uri->segment(3);
-        $this->load->library('session');
+    function add_to_cart() {
+      $product_id = $this->uri->segment(3);
+      $this->load->library('session');
 
-        if(isset($this->session->userdata[$product_id])){
-          $newValue = $this->session->userdata[$product_id] + 1;
+      if(isset($this->session->userdata[$product_id])){
+        $newValue = $this->session->userdata[$product_id] + 1;
+        $this->session->set_userdata(array($product_id => $newValue));
+      } else {
+        $this->session->set_userdata(array($product_id => 1));
+      }
+
+      $this->load->model('product_model');
+      $product_info = $this->product_model->getPrice($product_id);
+
+      $old_total = $this->session->userdata['total'];
+      $old_quant = $this->session->userdata['total_quantity'];
+      $this->session->set_userdata(array('total' => $old_total + $product_info->price));
+      $this->session->set_userdata(array('total_quantity' => $old_quant + 1));
+      $this->browse();
+    }
+
+    function remove_from_cart($product_id) {
+      $product_id = $this->uri->segment(3);
+      $this->load->library('session');
+
+      $this->load->model('product_model');
+      $product_info = $this->product_model->getPrice($product_id);
+
+      if(isset($this->session->userdata[$product_id])) {
+        if($this->session->userdata[$product_id] >= 1) {
+          $newValue = $this->session->userdata[$product_id] - 1;
           $this->session->set_userdata(array($product_id => $newValue));
-        } else {
-          $this->session->set_userdata(array($product_id => 1));
+          $old_quant = $this->session->userdata['total_quantity'];
+          $this->session->set_userdata(array('total_quantity' => $old_quant - 1));
+
+          if ($this->session->userdata['total_quantity'] <= 0){
+            $this->session->set_userdata(array('total' => 0));
+          } else {
+            $old_total = $this->session->userdata['total'];
+            $this->session->set_userdata(array('total' => $old_total - $product_info->price));
+          }
+        } else if($this->session->userdata[$product_id] == 0){
+          $this->session->unset_userdata(array($product_id));
         }
-
-        $this->load->model('product_model');
-        $product_info = $this->product_model->getPrice($product_id);
-
-        $old_total = $this->session->userdata['total'];
-        $old_quant = $this->session->userdata['total_quantity'];
-        $this->session->set_userdata(array('total' => $old_total + $product_info->price));
-        $this->session->set_userdata(array('total_quantity' => $old_quant + 1));
-        $this->browse();
       }
 
-      function remove_from_cart($product_id) {
-        $product_id = $this->uri->segment(3);
-        $this->load->library('session');
-
-        $this->load->model('product_model');
-        $product_info = $this->product_model->getPrice($product_id);
-
-        if(isset($this->session->userdata[$product_id])) {
-          if($this->session->userdata[$product_id] >= 1) {
-            $newValue = $this->session->userdata[$product_id] - 1;
-            $this->session->set_userdata(array($product_id => $newValue));
-            $old_quant = $this->session->userdata['total_quantity'];
-            $this->session->set_userdata(array('total_quantity' => $old_quant - 1));
-
-            if ($this->session->userdata['total_quantity'] <= 0){
-              $this->session->set_userdata(array('total' => 0));
-            } else {
-              $old_total = $this->session->userdata['total'];
-              $this->session->set_userdata(array('total' => $old_total - $product_info->price));
-            }
-           }
-        }
-
-        $this->browse();
-      }
+      $this->browse();
+    }
 
 }

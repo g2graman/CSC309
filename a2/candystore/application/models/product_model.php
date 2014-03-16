@@ -1,8 +1,11 @@
 <?php
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
 class Product_model extends CI_Model {
 
 	function getAll()
 	{
+		echo 'get';
 		$query = $this->db->get('product');
 		return $query->result('Product');
 	}
@@ -83,7 +86,7 @@ class Product_model extends CI_Model {
 		if($query->num_rows() > 0){
 			$browsing .= '<div class="media">';
 			foreach($products as $product) {
-				if (isset($this->session->userdata[$product->id])) {
+				if (isset($this->session->userdata[$product->id]) && $this->session->userdata[$product->id] > 0) {
 					$browsing .= '<a class="pull-left" href="#">';
 					$browsing .= '<img class="media-object" src="' . base_url() . $product->photo_url . '" width="64px" height="64px" alt="..."></a>';
 					$browsing .= '<div class="media-body">';
@@ -110,7 +113,7 @@ class Product_model extends CI_Model {
 			return false;
 		}
 
-		if($expyear < 2014){
+		if($expyear < 100 && $expyear > 0){
 			return false;
 		}
 
