@@ -49,21 +49,25 @@ class Product_model extends CI_Model {
 		$browsing = "";
 		if($query->num_rows() > 0){
 			$browsing .= '<div class="container-fluid">';
-			$browsing .= '<div class="row-fluid vertical-center-row">'
+			$browsing .= '<div class="row-fluid vertical-center-row">';
 			$browsing .= '<div class="col-lg-12">';
 			$browsing .= '<div class="row-fluid">';
 			$browsing .= '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
 			$browsing .= '<ul class="list-group">';
 			foreach ($products as $product){
-				$browsing .= '<a href="#" class="list-group-item">';
+				$browsing .= '<a id="' . $product->id .'" class="list-group-item">';
 				$browsing .= '<a class="thumbnail">';
-				$browsing .= '<img data-src="' . base_url() . $product->photo_url . '" alt="..." height="150px" width="150px">';
+				$browsing .= '<img src="' . base_url() . $product->photo_url . '" alt="..." >';
 				$browsing .= '</a>';
-				$browsing .= '<h4 class="list-group-item-heading">PRODUCT NAME';
-				$browsing .= '<span class="label label-default pull-right">' . $this->session->userdata[$product->id] . '</span>';
+				$browsing .= '<h4 class="list-group-item-heading">'. $product->name .'';
+				if(isset($this->session->userdata[$product->id])){
+					$browsing .= '<span class="label label-default pull-right">' . $this->session->userdata[$product->id] . '</span>';
+				} else {
+					$browsing .= '<span class="label label-default pull-right">0</span>';
+				}
 				$browsing .= '</h4>';
 				$browsing .= '<p class="list-group-item-text">';
-				$browsing .= '<p><div class="well">' . $product->description .'</div></p>';
+				$browsing .= '<p><div class="well"><b>Price: $' . $product->price . '</b><br>' . $product->description .'</div></p>';
 				$browsing .= '<a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>';
 				$browsing .= '<a href="' . base_url() .'cart/remove_from_cart/'.$product->id.'" class="btn btn-default pull-right" role="button">Remove From Cart</a>';
 				$browsing .= '</p>';
@@ -76,7 +80,7 @@ class Product_model extends CI_Model {
 			$browsing .= '</div>';
 			$browsing .= '</div>';
 			$browsing .= '</div>';
-			
+
 			//Print out the total cost
 			if(isset($this->session->userdata['total'])) {
 					$browsing .= '<p>'. $this->session->userdata['total'] .'</p>';

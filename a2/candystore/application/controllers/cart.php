@@ -30,18 +30,25 @@ class Cart extends CI_Controller {
     function browse(){
       $this->load->model('product_model');
       $this->load->library('session');
+      if(isset($this->session->userdata['browse_id'])){
+        $browse_id = $this->session->userdata['browse_id'];
+        $this->session->unset_userdata('browse_id');
+        header('Location:' . base_url() . 'cart/browse#' . $browse_id );
+      }
+
       if(!isset($this->session->userdata['total'])){
         $this->session->set_userdata(array('total' => 0));
       }
+
       if(!isset($this->session->userdata['total_quantity'])){
         $this->session->set_userdata(array('total_quantity' => 0));
       }
 
       $browse_output = $this->product_model->browse_products();
       $data = array('browse_data' => $browse_output);
-      //echo $data;
-      //$this->load->view->('customer/browse.php');
+
       $this->load->view('layout/header.php');
+      $this->load->view('layout/navbar.php');
       $this->load->view('customer/browse.php', $data);
     }
 
@@ -98,6 +105,7 @@ class Cart extends CI_Controller {
       $old_quant = $this->session->userdata['total_quantity'];
       $this->session->set_userdata(array('total' => $old_total + $product_info->price));
       $this->session->set_userdata(array('total_quantity' => $old_quant + 1));
+      $this->session->set_userdata(array('browse_id' => $product_id));
       $this->browse();
     }
 
@@ -126,6 +134,7 @@ class Cart extends CI_Controller {
         }
       }
 
+      $this->session->set_userdata(array('browse_id' => $product_id));
       $this->browse();
     }
 
