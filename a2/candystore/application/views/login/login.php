@@ -14,7 +14,7 @@
 											<h3 class="panel-title">Login</h3>
 										</div>
 										<div class="panel-body">
-											<center>INSTRUCTIONS OR GREETING!</center>
+											<center>Please Login To Continue!</center>
 										</div>
 
 <?php

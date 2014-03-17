@@ -6,7 +6,8 @@
   	<link href="<?php echo base_url();?>css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url();?>css/flat-ui.css" rel="stylesheet">
     <link href="<?php echo base_url();?>css/prettify.css" rel="stylesheet">
-  
+    <link href="<?php echo base_url();?>css/our.css" rel="stylesheet">
+
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-1.10.3.custom.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url();?>js/jquery.ui.touch-punch.min.js"></script>

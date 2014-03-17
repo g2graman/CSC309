@@ -20,6 +20,8 @@ class Login extends CI_Controller {
     }
 
     function customer() {
+      $this->load->view('layout/header.php');
+      $this->load->view('layout/navbar.php');
       $this->load->view('customer/index.php');
     }
 
@@ -28,8 +30,13 @@ class Login extends CI_Controller {
     }
 
     function validate() {
+
       $login = $this->input->get_post('login');
       $password = $this->input->get_post('password');
+
+      if($login==="" || $password ===""){
+        redirect('login/loginForm', 'refresh');
+      }
 
       $this->load->library('form_validation');
       $this->form_validation->set_rules('login','Login','required');
@@ -74,7 +81,7 @@ class Login extends CI_Controller {
           }
 
         } else {
-          redirect('login/index', 'refresh');
+          redirect('login/loginForm', 'refresh');
         }
       }
 
