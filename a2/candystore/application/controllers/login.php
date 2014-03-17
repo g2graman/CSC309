@@ -23,6 +23,10 @@ class Login extends CI_Controller {
       $this->load->view('layout/header.php');
       $this->load->view('layout/navbar.php');
       $this->load->view('customer/index.php');
+      $this->load->model('product_model');
+      $data['browse_data_customer'] = $this->product_model->browse_products();
+      $this->load->view('customer/browse.php', $data);
+
     }
 
     function loginForm() {
