@@ -42,40 +42,49 @@ class Product_model extends CI_Model {
 
 	function browse_products(){
 		$this->load->library('session');
+		$this->load->view('layout/header.php');
+		//$this->load->view('layout/navbar.php');
 		$query = $this->db->get('product');
 		$products = $query->result();
 		$browsing = "";
 		if($query->num_rows() > 0){
-			$browsing .= '<div class="row">';
+			$browsing .= echo '<div class="container-fluid">';
+			$browsing .= echo '<div class="row-fluid vertical-center-row">'
+			$browsing .= echo '<div class="col-lg-12">';
+			$browsing .= echo '<div class="row-fluid">';
+			$browsing .= echo '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
+			$browsing .= echo '<ul class="list-group">';
 			foreach ($products as $product){
-				  $browsing .= '<div class="col-sm-6 col-md-4">';
-				    $browsing .= '<div class="thumbnail">';
-				      $browsing .= '<img src="' . base_url() . $product->photo_url . '" alt="..." height="150px" width="150px">';
-				      $browsing .= '<div class="caption">';
-				        $browsing .= '<h3>' . $product->name .'</h3>';
-				        $browsing .= '<p>' . $product->description . '</p>';
-				        $browsing .= '<p><a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>'
-									. '<a href="' . base_url() .'cart/remove_from_cart/'.$product->id.'" class="btn btn-default" role="button">Remove From Cart</a>';
-								if(isset($this->session->userdata[$product->id])){
-									$browsing .= '<a href="#" class="btn btn-default" role="button">'. $this->session->userdata[$product->id] .'</a></p>';
-								} else {
-									$browsing .= '<a href="#" class="btn btn-default" role="button">0</a></p>';
-								}
-
-				      $browsing .= '</div>';
-				    $browsing .= '</div>';
-				  $browsing .= '</div>';
+				$browsing .= '<a href="#" class="list-group-item">';
+				$browsing .= '<a class="thumbnail">';
+				$browsing .= '<img data-src="' . base_url() . $product->photo_url . '" alt="..." height="150px" width="150px">';
+				$browsing .= '</a>';
+				$browsing .= '<h4 class="list-group-item-heading">PRODUCT NAME';
+				$browsing .= '<span class="label label-default pull-right">' . $this->session->userdata[$product->id] . '</span>';
+				$browsing .= '</h4>';
+				$browsing .= '<p class="list-group-item-text">';
+				$browsing .= '<p><div class="well">' . $product->description .'</div></p>';
+				$browsing .= '<a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>';
+				$browsing .= '<a href="' . base_url() .'cart/remove_from_cart/'.$product->id.'" class="btn btn-default pull-right" role="button">Remove From Cart</a>';
+				$browsing .= '</p>';
+				$browsing .= '</a><br><br>';
 			}
+			$browsing .= '</ul>';
 			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			
+			//Print out the total cost
 			if(isset($this->session->userdata['total'])) {
 					$browsing .= '<p>'. $this->session->userdata['total'] .'</p>';
 			}
 		} else {
 			$browsing .= 'no products';
 		}
-
 		return $browsing;
-
 	}
 
 	function show_cart() {
