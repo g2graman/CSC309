@@ -97,24 +97,60 @@ class Product_model extends CI_Model {
 		$products = $query->result();
 		$browsing = "";
 		if($query->num_rows() > 0){
-			$browsing .= '<div class="media">';
+			$browsing .= '<div class="container-fluid">';
+			$browsing .= '<div class="row vertical-center-row">';
+			$browsing .= '<div class="col-lg-12">';
+			$browsing .= '<div class="row ">';
+			$browsing .= '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
+			$browsing .= '<div class="panel panel-success">';
+
+			$browsing .= '<table class="table">';
+			$browsing .= '<thead>';
+			$browsing .= '<tr>';
+			$browsing .= '<th>#</th>';
+			$browsing .= '<th></th>';
+			$browsing .= '<th>Product Name</th>';
+			$browsing .= '<th>Quantity</th>';
+			$browsing .= '<th>Total Cost</th>';
+			$browsing .= '</tr>';
+			$browsing .= '</thead>';
+			$browsing .= '<tbody>';
+			$counter = 0;
 			foreach($products as $product) {
 				if (isset($this->session->userdata[$product->id]) && $this->session->userdata[$product->id] > 0) {
+					$counter = $counter + 1;
+					$browsing .= '<tr>';
+					$browsing .= '<td>'. $counter . '</td>';
+					$browsing .= '<td><div class="media">';
 					$browsing .= '<a class="pull-left" href="#">';
-					$browsing .= '<img class="media-object" src="' . base_url() . $product->photo_url . '" width="64px" height="64px" alt="..."></a>';
-					$browsing .= '<div class="media-body">';
-					$browsing .= '<h4>' . $product->name .'</h4>';
-					$browsing .= '<p>Quantity: ' . $this->session->userdata[$product->id] . '</p>';
-					$browsing .= '</div>';
+					$browsing .= '<img class="media-object" src="' . base_url() . $product->photo_url . '" width="64px" height="64px" alt="' . $product->name . '"></a>';
+					$browsing .= '</div></td>';
+					$browsing .= '<td>' . $product->name . '</td>';
+					$browsing .= '<td>' . $this->session->userdata[$product->id] . '</td>';
+					$browsing .= '<td>' . $product->price * $this->session->userdata[$product->id] . '</td>';
+					$browsing .= '</tr>';
+
 				}
 			}
+
+			$browsing .= '</tbody>';
+			$browsing .= '</table>';
+			$browsing .= '<div class="panel-footer">DETAILS OF TOTAL</div>';
 			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+			$browsing .= '</div>';
+
 		} else {
 			$browsing .= 'no products';
 		}
 
 		return $browsing;
 	}
+
+
 
 	function validate_new_order_info($userInfo){
 

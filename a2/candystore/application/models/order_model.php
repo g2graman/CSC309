@@ -45,14 +45,14 @@ class order_model extends CI_Model {
         $receipt_output .= '<div class="col-lg-12">';
         $receipt_output .= '<div class="row ">';
         $receipt_output .= '<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">';
-                               
+
       foreach ($orders as $order){
-		$receipt_output .= '<div class="panel panel-info">';
-        $receipt_output .= '<div class="panel-heading">Receipt generated for' . $this->session->userdata['first'] . ' ' . $this->session->userdata['last'] . '</div>';
+		    $receipt_output .= '<div class="panel panel-info">';
+        $receipt_output .= '<div class="panel-heading">Receipt generated for ' . $this->session->userdata['first'] . ' ' . $this->session->userdata['last'] . '</div>';
         $receipt_output .= '<div class="panel-body">';
         $receipt_output .= '<p> Order ' . $order->id . ' on ' . $order->order_date . ' at ' . $order->order_time . '</p>';
         $receipt_output .= '</div>';
-		$receipt_output .= '<table class="table">';
+		    $receipt_output .= '<table class="table">';
         $receipt_output .= '<thead>';
         $receipt_output .= '<tr>';
         $receipt_output .= '<th>#</th>';
@@ -60,7 +60,6 @@ class order_model extends CI_Model {
         $receipt_output .= '<th>Product Name</th>';
         $receipt_output .= '<th>Quantity</th>';
         $receipt_output .= '<th>Cost Per Item</th>';
-        $receipt_output .= '<th>Total Cost</th>';
         $receipt_output .= '</tr>';
         $receipt_output .= '</thead>';
         $receipt_output .= '<tbody>';
@@ -69,29 +68,33 @@ class order_model extends CI_Model {
         $order_item_query = $this->db->get_where('order_item',array('order_id' => $order->id));
         $order_items = $order_item_query->result();
         $item_counter = 0;
+        $quantity_counter = 0;
         if($order_item_query->num_rows() > 0){
           foreach($order_items as $item){
-			  $item_counter = $item_counter + 1;
-			  $receipt_output .= '<tr>';
-			  $receipt_output .= '<td>' . $item_counter . '</td>';
-			  $receipt_output .= '<td>' . $this->get_product_name($item->product_id) .'</td>';
-			  $receipt_output .= '<td>' . $this->get_product_price($item->product_id) .'</td>';
-			  $receipt_output .= '<td> ' . $product_price * $item->quantity . '</td>';
-			  $receipt_output .= '<td> ' . $product_price * $item->quantity . '</td>';
-			  $receipt_output .= '<td> ' . $total_quantity + $item->quantity .'</td>';
-			  $receipt_output .= '</tr>';
+            $product_info = $this->get_product_info($item->product_id);
+            $product_price = $product_info->price;
+            $product_name = $product_info->name;
+    			  $item_counter = $item_counter + 1;
+            $quantity_counter = $quantity_counter + $item->quantity;
+    			  $receipt_output .= '<tr>';
+    			  $receipt_output .= '<td>' . $item_counter . '</td>';
+    			  $receipt_output .= '<td>' . $product_name .'</td>';
+    			  $receipt_output .= '<td>' . $product_price .'</td>';
+    			  $receipt_output .= '<td> ' . $item->quantity . '</td>';
+    			  $receipt_output .= '<td> ' . $product_price * $item->quantity . '</td>';
+    			  $receipt_output .= '</tr>';
+            }
           }
-        }
 
-		$receipt_output .= '</tbody>';
+		    $receipt_output .= '</tbody>';
         $receipt_output .= '</table>';
-        $receipt_output .= '<div class="panel-footer">Total Cost of Purchase: ' . $order->total . '      Total Quantity Purchased: ' . $total_quantity . '</div>';
+        $receipt_output .= '<div class="panel-footer">Total Cost of Purchase: ' . $order->total . '<br>Total Quantity Purchased: ' . $quantity_counter . '</div>';
         $receipt_output .= '</div>';
         $receipt_output .= '</div>';
         $receipt_output .= '</div>';
         $receipt_output .= '</div>';
         $receipt_output .= '</div>';
-		$receipt_output .= '</div>';
+		    $receipt_output .= '</div>';
         $receipt_output .= '<div>';
         $receipt_output .= '<br>';
         $receipt_output .= '</div>';
@@ -104,29 +107,16 @@ class order_model extends CI_Model {
 
   }
 
-  function get_product_name($id){
+  function get_product_info($id){
     $product_query = $this->db->get_where('product', array('id' => $id));
     $products = $product_query->result();
 
     if($product_query->num_rows() == 1){
       foreach($products as $product){
-        return $product->name;
+        return $product;
       }
     } else {
       return 'Error Accessing Product Name';
-    }
-  }
-
-  function get_product_price($id){
-    $product_query = $this->db->get_where('product', array('id' => $id));
-    $products = $product_query->result();
-
-    if($product_query->num_rows() == 1){
-      foreach($products as $product){
-        return $product->price;
-      }
-    } else {
-      return 'Error Accessing Product Price';
     }
   }
 
