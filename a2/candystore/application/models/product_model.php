@@ -48,12 +48,12 @@ class Product_model extends CI_Model {
 		$products = $query->result();
 		$browsing = "";
 		if($query->num_rows() > 0){
-			$browsing .= echo '<div class="container-fluid">';
-			$browsing .= echo '<div class="row-fluid vertical-center-row">'
-			$browsing .= echo '<div class="col-lg-12">';
-			$browsing .= echo '<div class="row-fluid">';
-			$browsing .= echo '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
-			$browsing .= echo '<ul class="list-group">';
+			$browsing .= '<div class="container-fluid">';
+			$browsing .= '<div class="row-fluid vertical-center-row">'
+			$browsing .= '<div class="col-lg-12">';
+			$browsing .= '<div class="row-fluid">';
+			$browsing .= '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
+			$browsing .= '<ul class="list-group">';
 			foreach ($products as $product){
 				$browsing .= '<a href="#" class="list-group-item">';
 				$browsing .= '<a class="thumbnail">';
