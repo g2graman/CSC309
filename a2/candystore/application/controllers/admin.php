@@ -26,8 +26,22 @@ class Admin extends CI_Controller {
     function perform_delete() {
       $this->db->empty_table('order_item');
       $this->db->empty_table('order');
-      $this->db->empty_table('customer');
-      $this->load->view('admin/deleted.php');
+
+      $query = $this->db->get('customer');
+      $users = $query->result();
+
+      if ($query->num_rows() > 0) {
+        foreach($users as $user) {
+          if($user->login != 'admin'){
+            $this->db->delete('customer', array('id' => $user->id));
+          }
+        }
+      }
+
+      $this->load->view('layout/header.php');
+      $this->load->view('layout/navbar.php');
+      $data = array('output' => 'success');
+      $this->load->view('admin/mass_delete.php', $data);
     }
 
     function logout() {
@@ -56,21 +70,21 @@ class Admin extends CI_Controller {
         $data['order_history'] = $this->order_model->order_history();
         //echo 'order_history';
         $this->load->view('layout/header.php');
-        $this->load->view('admin/all_orders.php');
+        $this->load->view('layout/navbar.php');
+        $this->load->view('admin/all_orders.php', $data);
       } else {
         $this->load->view('layout/header.php');
-        $this->load->view('login/error.php');
+        $this->load->view('layout/navbar.php');
+        $this->load->view('login/login.php');
       }
 
     }
 
     function mass_delete() {
       if($this->admin_logged_in()) {
-        $this->load->view('admin/mass_delete.php');
-        /*$this->load->model('order_model');
-        $data['order_history'] = $this->order_model->order_history();
         $this->load->view('layout/header.php');
-        $this->load->view('admin/all_orders.php'); */
+        $this->load->view('layout/navbar.php');
+        $this->load->view('admin/mass_delete.php');
       } else {
         redirect('login/index', 'refresh');
       }

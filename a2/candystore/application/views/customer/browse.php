@@ -1,4 +1,4 @@
-<div class="ourcenter"><?php
+<div class="ourcenter"><br><?php
 
   if(isset($browse_data_customer)){
     echo $browse_data_customer;

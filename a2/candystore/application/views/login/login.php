@@ -1,4 +1,4 @@
-<br><br><br>
+<div class="ourcenter"><br><br>
 	<div class="container-fluid">
 	<div class="row vertical-center-row">
 			<div class="col-lg-12">
@@ -50,3 +50,4 @@
             </div>
         </div>
       </div>
+</div>

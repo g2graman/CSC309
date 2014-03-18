@@ -18,6 +18,16 @@ class customer_model extends CI_Model {
     $this->db->insert('customer', $userInfo);
   }
 
+  function get_customer_info($id){
+    $cust_query = $this->db->get_where('customer', array('id' => $id));
+    $cust_result = $cust_query->result();
+    if($cust_query->num_rows() > 0){
+      foreach ($cust_result as $cust){
+        return $cust;
+      }
+    }
+  }
+
 
 
 }

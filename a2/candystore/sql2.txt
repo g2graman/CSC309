@@ -52,6 +52,11 @@ INSERT INTO customer
   (id, first, last, login, password, email)
   VALUES (100, "angelina", "jolie", "angelina", "jolie", "angelina@jolie.com");
 
+
+
+
+
+
 -- insert james bond order 1--
 -- (5) mnms, (3) gummies --
 INSERT INTO `candystore`.`order`

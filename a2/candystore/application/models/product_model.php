@@ -55,7 +55,7 @@ class Product_model extends CI_Model {
 			$browsing .= '<div class="col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-6 col-xs-offset-3">';
 			$browsing .= '<ul class="list-group">';
 			foreach ($products as $product){
-				$browsing .= '<a id="' . $product->id .'" class="list-group-item">';
+				$browsing .= '<a id="' . $product->id .'" class="">';
 				$browsing .= '<a class="thumbnail">';
 				$browsing .= '<img src="' . base_url() . $product->photo_url . '" alt="..." >';
 				$browsing .= '</a>';
@@ -68,7 +68,7 @@ class Product_model extends CI_Model {
 				$browsing .= '</h4>';
 				$browsing .= '<p class="list-group-item-text">';
 				$browsing .= '<p><div class="well"><b>Price: $' . $product->price . '</b><br>' . $product->description .'</div></p>';
-				$browsing .= '<a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary" role="button">Add to Cart</a>';
+				$browsing .= '<a href="' . base_url() .'cart/add_to_cart/'.$product->id.'" class="btn btn-primary pull-left" role="button">Add to Cart</a>';
 				$browsing .= '<a href="' . base_url() .'cart/remove_from_cart/'.$product->id.'" class="btn btn-default pull-right" role="button">Remove From Cart</a>';
 				$browsing .= '</p>';
 				$browsing .= '</a><br><br>';
@@ -160,11 +160,25 @@ class Product_model extends CI_Model {
 		$expmonth = $userInfo['expmonth'];
 		$expyear = $userInfo['expyear'];
 
-		if($expmonth < 0 && $expmonth > 12 ){
+		$year = "%Y";
+		$month = "%m";
+		$time = time();
+
+		$full_year = mdate($year, $time);
+		$the_year = substr($full_year, -2);
+		$the_month = mdate($month, $time);
+
+		if($expmonth < 0 || $expmonth > 12 ){
 			return false;
 		}
 
-		if($expyear < 100 && $expyear > 0){
+		if($expyear == $the_year){
+			if($the_month > $expmonth){
+				return false;
+			}
+		}
+
+		if($expyear > 100 || $expyear < $the_year){
 			return false;
 		}
 
@@ -206,6 +220,24 @@ class Product_model extends CI_Model {
 		}
 
 		return $order_id;
+	}
+
+
+
+	function reset_cart(){
+		$query = $this->db->get('product');
+		$products = $query->result();
+
+		$this->load->library('session');
+
+		foreach($products as $product){
+			if (isset($this->session->userdata[$product->id])) {
+				$this->session->unset_userdata($product->id);
+			}
+		}
+
+		$this->session->unset_userdata('total');
+		$this->session->unset_userdata('total_quantity');
 	}
 
 }

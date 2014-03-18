@@ -8,22 +8,69 @@ class order_model extends CI_Model {
   }
 
   function order_history() {
-    $query = $this->db->get('order');
-    $orders = $query->result();
-    if($query->num_rows() > 0){
+    $this->load->library('session');
+
+    $order_query = $this->db->get_where('order',array());
+
+    $orders = $order_query->result();
+    $order_output = "";
+    $total_quantity = 0;
+    $item_counter = 0;
+
+    if($order_query->num_rows() > 0){
+      $order_output .= '<div class="container-fluid">';
+      $order_output .= '<div class="row vertical-center-row">';
+      $order_output .= '<div class="col-lg-12">';
+      $order_output .= '<div class="row ">';
+      $order_output .= '<div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-8 col-xs-offset-2">';
+
+      $order_output .= '<div class="panel panel-info">';
+      $order_output .= '<div class="panel-heading">All Past Order Information</div>';
+      $order_output .= '<div class="panel-body">';
+      $order_output .= '</div>';
+      $order_output .= '<table class="table">';
+      $order_output .= '<thead>';
+      $order_output .= '<tr>';
+      $order_output .= '<th>Order ID</th>';
+      $order_output .= '<th>Customer Name</th>';
+      $order_output .= '<th>Date</th>';
+      $order_output .= '<th>Total Cost</th>';
+      $order_output .= '</tr>';
+      $order_output .= '</thead>';
+      $order_output .= '<tbody>';
+
+
+      $this->load->model('customer_model');
+
       foreach ($orders as $order){
-        echo '<div class="row">';
-        echo '<div class="col-md-1">'.$order->id.'</div>';
-        echo '<div class="col-md-3">'.$order->customer_id.'</div>';
-        echo '<div class="col-md-3">'.$order->order_date.'</div>';
-        echo '<div class="col-md-3">'.$order->total.'</div>';
-        echo '<div class="col-md-2"> View ID </div>';
-        echo '<br>';
-        echo '</div>';
+        $customer_info = $this->customer_model->get_customer_info($order->customer_id);
+        
+        $order_output .= '<tr>';
+        $order_output .= '<td>' . $order->id . '</td>';
+        $order_output .= '<td>' . $customer_info->first . ' ' . $customer_info->last .'</td>';
+        $order_output .= '<td>' . $order->order_date .'</td>';
+        $order_output .= '<td> ' . $order->total . '</td>';
+        $order_output .= '</tr>';
+
+
       }
     } else {
-      echo 'no orders';
+      return 'Error generating order output';
     }
+
+    $order_output .= '</tbody>';
+    $order_output .= '</table>';
+    $order_output .= '</div>';
+    $order_output .= '</div>';
+    $order_output .= '</div>';
+    $order_output .= '</div>';
+    $order_output .= '</div>';
+    $order_output .= '</div>';
+    $order_output .= '<div>';
+    $order_output .= '<br>';
+    $order_output .= '</div>';
+
+    return $order_output;
 
 
   }
@@ -118,18 +165,6 @@ class order_model extends CI_Model {
     } else {
       return 'Error Accessing Product Name';
     }
-  }
-
-  function generate_receipt_header(){
-    $receipt_output = '<div class="row">';
-    $receipt_output .= '<div class="col-md-1">Item #</div>';
-    $receipt_output .= '<div class="col-md-2">Product ID</div>';
-    $receipt_output .= '<div class="col-md-3">Product Name</div>';
-    $receipt_output .= '<div class="col-md-2">Quantity</div>';
-    $receipt_output .= '<div class="col-md-2">Cost Per Item</div>';
-    $receipt_output .= '<div class="col-md-2">Total Cost</div>';
-    $receipt_output .= '</div>';
-    return $receipt_output;
   }
 
 

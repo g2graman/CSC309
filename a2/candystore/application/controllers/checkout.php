@@ -24,6 +24,7 @@ class Checkout extends CI_Controller {
     }
 
     function verify_user_info(){
+      $this->load->library('session');
       $userInfo['cnum'] = $this->input->get_post('cnum');
       $userInfo['expmonth'] = $this->input->get_post('expmonth');
       $userInfo['expyear'] = $this->input->get_post('expyear');
@@ -31,7 +32,7 @@ class Checkout extends CI_Controller {
       $this->load->library('form_validation');
       $this->form_validation->set_rules('cnum','Credit Card Number','required|max_length[16]|min_length[16]');
       $this->form_validation->set_rules('expmonth','Expiration Month','required|integer|min_length[2]|max_length[2]');
-      $this->form_validation->set_rules('expyear','Expiration Year','required|integer|min_length[4]|max_length[4]');
+      $this->form_validation->set_rules('expyear','Expiration Year','required|integer|min_length[2]|max_length[2]');
 
       if($this->form_validation->run() == true){
         $this->load->model('product_model');
@@ -39,13 +40,14 @@ class Checkout extends CI_Controller {
           $order_id = $this->product_model->process_order($userInfo);
           $receipt_info = $this->display_receipt($order_id);
           $this->email_receipt($order_id, $receipt_info);
+          $this->product_model->reset_cart();
         } else {
-          echo 'Error: An account with your login or email already exists.';
-          //$this->load->view('login/new_user.php');
+          $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information'));
+          redirect('cart/checkout', 'refresh');
         }
       } else {
-        $data = array('error' => 'You did not correctly fill out your credit card information.');
-        $this->load->view('customer/checkout.php', $data);
+        $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information'));
+        redirect('cart/checkout', 'refresh');
       }
     }
 
@@ -54,6 +56,7 @@ class Checkout extends CI_Controller {
       $receipt_output = $this->order_model->create_receipt($order_id);
       $data = array('receipt_output' => $receipt_output);
       $this->load->view('layout/header.php');
+      $this->load->view('layout/navbar.php');
       $this->load->view('customer/receipt.php', $data);
       return $receipt_output;
     }
