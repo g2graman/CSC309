@@ -42,9 +42,11 @@ class admin_model extends CI_Model {
       $manage_products .= '</thead>';
       $manage_products .= '<tbody>';
 
+      $this->load->model('customer_model');
+
       foreach($orders as $order){
 
-        $customer_info = $this->get_admin_info($order->customer_id);
+        $customer_info = $this->customer_model->get_customer_info($order->customer_id);
 
         $manage_products .= '<tr>';
         $manage_products .= '<td>' . $order->id . '</td>';

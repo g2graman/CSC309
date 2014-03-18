@@ -9,6 +9,9 @@ echo '<a class="navbar-brand" href="' . base_url() . 'login/index">FRANSHNI CAND
 echo '</div>';
 echo '<div class="collapse navbar-collapse" id="navbar-collapse-01">';
 echo '<ul class="nav navbar-nav">';
+if(isset($this->session->userdata['login']) && $this->session->userdata['login'] === 'admin'){
+  echo '<li><a href="' . base_url() .'login/index">Admin Controls</a></li>';
+}
 echo '<li><a href="' . base_url() .'cart/browse">Browse Products</a></li>';
 echo '<li><a href="' . base_url() .'cart/checkout">Checkout</a></li>';
 echo '</ul>';
