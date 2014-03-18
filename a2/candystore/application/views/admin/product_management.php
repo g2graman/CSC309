@@ -1,15 +1,15 @@
-<?php
 
-  echo "Yay. ".$this->session->userdata['login']." is logged in. We are on <b>product_management</b> page.";
-
-  echo '<a href="' . base_url() . 'login/logout">logout</a>';
-
-  echo "<br><br>";
-
-?>
-
-<h1>Product Management</h1>
+<div class="ourcenter">
+<h1>Product Manage</h1>
 <p>This page allows you to add, delete or edit all products in your database.</p>
 
 
-<a href="' . base_url() . 'login/index">Back to Admin Home Page</a>
+<?php
+    if(isset($product_info)){
+      echo $product_info;
+    } else {
+      echo 'Error loading Order History';
+    }
+?>
+
+</div>

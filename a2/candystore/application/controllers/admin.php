@@ -52,11 +52,11 @@ class Admin extends CI_Controller {
 
     function product_management() {
       if($this->admin_logged_in()) {
-        $this->load->view('admin/product_management.php');
-        /*$this->load->model('order_model');
-        $data['order_history'] = $this->order_model->order_history();
+        $this->load->model('admin_model');
+        $data['product_info'] = $this->admin_model->manage_products();
         $this->load->view('layout/header.php');
-        $this->load->view('admin/all_orders.php'); */
+        $this->load->view('layout/navbar.php');
+        $this->load->view('admin/product_management.php', $data);
       } else {
         redirect('login/index', 'refresh');
       }

@@ -7,7 +7,7 @@
 
 <?php
 
-	echo '<a href="'. base_url() .'products/index"><button class="btn btn-default btn-inverse">Product Management</button></a><br>';
+	echo '<a href="'. base_url() .'admin/product_management"><button class="btn btn-default btn-inverse">Product Management</button></a><br>';
 	echo '<br>';
 	echo '<a href="'. base_url() .'admin/all_orders"><button class="btn btn-default btn-inverse">Display Orders</button></a><br>';
 	echo '<br>';

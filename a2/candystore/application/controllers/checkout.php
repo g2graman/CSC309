@@ -75,7 +75,7 @@ class Checkout extends CI_Controller {
 
 
       $this->load->library('session');
-      $this->load->model('admin');
+      $this->load->model('admin_model');
 
       $admin_info = $this->admin->get_admin_info();
 
