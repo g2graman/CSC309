@@ -7,13 +7,13 @@
     echo $show_output;
   }
 
+  if($this->session->userdata['total_quantity'] <= 0 && !isset($this->session->userdata['redirect_value'])){
+    echo "Warning: You have no items in your cart<br>";
+  }
+
     if(isset($this->session->userdata['redirect_value'])){
       echo $this->session->userdata['redirect_value'].'<br>';
       $this->session->unset_userdata('redirect_value');
-    }
-
-    if($this->session->userdata['total_quantity'] <= 0){
-      echo "Warning: You have no items in your cart<br>";
     }
 
   echo form_open('checkout/verify_user_info');

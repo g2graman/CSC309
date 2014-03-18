@@ -25,31 +25,36 @@ class Checkout extends CI_Controller {
 
     function verify_user_info(){
       $this->load->library('session');
-      $userInfo['cnum'] = $this->input->get_post('cnum');
-      $userInfo['expmonth'] = $this->input->get_post('expmonth');
-      $userInfo['expyear'] = $this->input->get_post('expyear');
-
-      $this->load->library('form_validation');
-      $this->form_validation->set_rules('cnum','Credit Card Number','required|max_length[16]|min_length[16]');
-      $this->form_validation->set_rules('expmonth','Expiration Month','required|integer|min_length[2]|max_length[2]');
-      $this->form_validation->set_rules('expyear','Expiration Year','required|integer|min_length[2]|max_length[2]');
-
-      if($this->form_validation->run() == true){
-        $this->load->model('product_model');
-        if($this->product_model->validate_new_order_info($userInfo)){
-          $order_id = $this->product_model->process_order($userInfo);
-          $receipt_info = $this->display_receipt($order_id);
-          $this->email_receipt($order_id, $receipt_info);
-          $this->product_model->reset_cart();
-        } else {
-          $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information'));
-          redirect('cart/checkout', 'refresh');
-        }
-      } else {
-        $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information'));
+      if($this->session->userdata['total_quantity'] < 1){
+        $this->session->set_userdata(array('redirect_value' => 'Error: There are no items in your cart.'));
         redirect('cart/checkout', 'refresh');
       }
-    }
+        $userInfo['cnum'] = $this->input->get_post('cnum');
+        $userInfo['expmonth'] = $this->input->get_post('expmonth');
+        $userInfo['expyear'] = $this->input->get_post('expyear');
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('cnum','Credit Card Number','required|max_length[16]|min_length[16]');
+        $this->form_validation->set_rules('expmonth','Expiration Month','required|integer|min_length[2]|max_length[2]');
+        $this->form_validation->set_rules('expyear','Expiration Year','required|integer|min_length[2]|max_length[2]');
+
+        if($this->form_validation->run() == true){
+          $this->load->model('product_model');
+          if($this->product_model->validate_new_order_info($userInfo)){
+            $order_id = $this->product_model->process_order($userInfo);
+            $receipt_info = $this->display_receipt($order_id);
+            $this->email_receipt($order_id, $receipt_info);
+            $this->product_model->reset_cart();
+          } else {
+            $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information'));
+            redirect('cart/checkout', 'refresh');
+          }
+        } else {
+          $this->session->set_userdata(array('redirect_value' => 'Error: You did not correctly fill out your Credit Card Information.<br>Credit Card requires 16 digits, Year and Month are both 2 digits.'));
+          redirect('cart/checkout', 'refresh');
+        }
+      }
+
 
     function display_receipt($order_id){
       $this->load->model('order_model');
@@ -63,13 +68,8 @@ class Checkout extends CI_Controller {
 
     function email_receipt($order_id, $receipt_info){
       $this->load->library('email');
-      $config['protocol'] = 'smtp';
       $config['mailpath'] = '/usr/sbin/sendmail';
       $config['charset'] = "utf-8";
-      $config['smtp_host'] = 'ssl://smtp.gmail.com';
-      $config['smtp_user'] = 'inthemorningtabed@gmail.com';
-      $config['smtp_pass'] = '2013cssu2014';
-      $config['smtp_port'] = '465';
       $config['mailtype'] = 'html';
       $config['newline'] = "\r\n";
 

@@ -59,7 +59,6 @@ class Login extends CI_Controller {
     }
 
     function validate() {
-
       $login = $this->input->get_post('login');
       $password = $this->input->get_post('password');
 
@@ -75,7 +74,7 @@ class Login extends CI_Controller {
 
         $this->load->model('login_model');
         $this->load->model('customer');
-        $valid_customer = $valid_customer = $this->login_model->login_exists($login, $password);
+        $valid_customer = $this->login_model->login_exists($login, $password);
         if($valid_customer != NULL){
           $this->load->library('session');
           $customer = new Customer();
@@ -110,6 +109,7 @@ class Login extends CI_Controller {
           }
 
         } else {
+          $this->session->set_userdata(array('error' => 'The account username or password is invalid.'));
           redirect('login/loginForm', 'refresh');
         }
       }
@@ -164,8 +164,10 @@ class Login extends CI_Controller {
 
         if($this->customer_model->validate_new_user_info($userInfo)){
           $this->customer_model->create_user($userInfo);
-          $this->load->view('login/success.php');
-          $this->load->view('login/login.php');
+          $this->load->view('layout/header.php');
+          $this->load->view('layout/navbar.php');
+          $data = array('success' => 'You have successfully created your account.');
+          $this->load->view('login/login.php', $data);
         } else {
           $this->load->view('layout/header.php');
           $this->load->view('layout/navbar.php');

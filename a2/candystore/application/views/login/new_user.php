@@ -11,7 +11,7 @@
                     </div>
                     <div class="panel-body">
                       <center>We're excited you want to shop with us! Create an account and enjoy the benefits!</center>
-                      <center><?php if(isset($error){echo $error; } ?></center>
+                      <center><small font><?php if(isset($error)){echo $error; } ?><small font></center>
                     </div>
 
                     <?php
@@ -61,12 +61,12 @@
                             </li>
                           </ul>
                           <div class="panel-footer">
-                            <a href="<?php echo base_url() . 'login/index';?>"  class="btn btn-default btn-success">
+                            <a href="<?php echo base_url() . 'login/index';?>"  class="btn btn-default btn-success pull-left">
                                 Back
                             </a>
                             <button class="btn btn-default btn-primary pull-right" name="submit" type="submit" value="login">
                                 Create Account
-                            </button>
+                            </button><small font><br><br></small font>
                           </div>
                         </form>
                         </div>

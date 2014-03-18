@@ -11,6 +11,16 @@
 										</div>
 										<div class="panel-body">
 											<center>Please Login To Continue!</center>
+											<center>
+												<?php if(isset($this->session->userdata['error'])){
+																echo $this->session->userdata['error'];
+																$this->session->unset_userdata('error');
+															}
+
+															if(isset($success)){
+																echo $success;
+															}
+												?>
 										</div>
 
 										<?php
@@ -36,12 +46,12 @@
                             </li>
                           </ul>
                           <div class="panel-footer">
-                            <a href="<?php echo base_url() . 'login/create_user';?>"  class="btn btn-default btn-success">
+                            <a href="<?php echo base_url() . 'login/create_user';?>"  class="btn btn-default btn-success pull-left">
                                 Sign up!
                             </a>
 														<button class="btn btn-default btn-primary pull-right" name="submit" type="submit" value="login">
 																Login
-														</button>
+														</button><p><small font><br></small font></p>
                           </div>
 												</form>
 												</div>
