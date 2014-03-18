@@ -1,29 +1,61 @@
-<h2>Edit Product</h2>
+<div class="ourcenter">
 
-<style>
-	input { display: block;}
+	<h2>Edit Product</h2>
 
-</style>
+<div class="container-fluid">
+<div class="row vertical-center-row">
+		<div class="col-lg-12">
+				<div class="row ">
+						<div class="col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-4 col-xs-offset-4">
 
-<?php
-	echo "<p>" . anchor('products/index','Back') . "</p>";
+									<?php
+										echo form_open("products/update/$product->id");
+									?>
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										<h3 class="panel-title">Edit Product Information</h3>
+									</div>
+								<div class="panel-body">
+									<center>Update the fields with the new product information, then press Update to continue.</center>
+								</div>
 
-	echo form_open("products/update/$product->id");
 
-	echo form_label('Name');
-	echo form_error('name');
-	echo form_input('name',$product->name,"required");
+			<ul class="list-group">
+				<li class="list-group-item">
+					<?php echo form_error('name'); ?>
+					<div class="input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+					<?php $name_data = array('class' => 'form-control', 'placeholder' => $product->name, 'value' => $product->name, 'name' => 'name', 'id' => 'name', 'required' => 'true');
+					echo form_input($name_data);?>
+				</div>
+				</li>
+				<li class="list-group-item">
+					<?php echo form_error('description'); ?>
+					<div class="input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-pencil"></span></span>
+					<?php $description_data = array('class' => 'form-control', 'placeholder' => $product->description, 'value' => $product->description, 'name' => 'description', 'id' => 'description', 'type' => 'description', 'required' => 'true');
+					echo form_input($description_data);?>
+				</div>
+				</li>
+				<li class="list-group-item">
+					<?php echo form_error('price'); ?>
+					<div class="input-group">
+					<span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+					<?php $price_data = array('class' => 'form-control', 'placeholder' => $product->price, 'value'=>$product->price, 'name' => 'price', 'id' => 'price', 'type' => 'number', 'required' => 'true', 'pattern' => '^\d+(\.|\,)\d{2}$');
+					echo form_input($price_data);?>
+				</div>
+				</li>
+			</ul>
+			<div class="panel-footer">
 
-	echo form_label('Description');
-	echo form_error('description');
-	echo form_input('description',$product->description,"required");
+				<button class="btn btn-default btn-primary" name="submit" type="submit" value="login">
+						Update
+				</button>
+			</div>
+		</form>
 
-	echo form_label('Price');
-	echo form_error('price');
-	echo form_input('price',$product->price,"required");
-
-	echo form_submit('submit', 'Save');
-	echo form_close();
-
-	echo '<a href="' . base_url() . 'admin/index">Return Home</a>';
-?>
+</div>
+</div>
+</div>
+</div>
+</div>

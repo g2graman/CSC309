@@ -13,9 +13,9 @@
 											<center>Please Login To Continue!</center>
 										</div>
 
-<?php
-	echo form_open('login/validate');
-?>
+										<?php
+											echo form_open('login/validate');
+										?>
 
                           <ul class="list-group">
                             <li class="list-group-item">

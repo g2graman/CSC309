@@ -65,21 +65,28 @@ class Products extends CI_Controller {
       }
     }
 
-  function read($id) {
+  function read() {
+    $product_id = $this->uri->segment(3);
     $this->load->model('product_model');
-    $product = $this->product_model->get($id);
+    $product = $this->product_model->get($product_id);
     $data['product']=$product;
+    $this->load->view('layout/header.php');
+    $this->load->view('layout/navbar.php');
     $this->load->view('product/read.php',$data);
   }
 
-  function editForm($id) {
+  function editForm() {
+    $product_id = $this->uri->segment(3);
     $this->load->model('product_model');
-    $product = $this->product_model->get($id);
+    $product = $this->product_model->get($product_id);
     $data['product']=$product;
+    $this->load->view('layout/header.php');
+    $this->load->view('layout/navbar.php');
     $this->load->view('product/editForm.php',$data);
   }
 
-  function update($id) {
+  function update() {
+    $id = $this->uri->segment(3);
     $this->load->library('form_validation');
     $this->form_validation->set_rules('name','Name','required');
     $this->form_validation->set_rules('description','Description','required');
@@ -94,8 +101,7 @@ class Products extends CI_Controller {
 
       $this->load->model('product_model');
       $this->product_model->update($product);
-      //Then we redirect to the index page again
-      redirect('products/index', 'refresh');
+      redirect('admin/product_management', 'refresh');
     }
     else {
       $product = new Product();
@@ -108,14 +114,15 @@ class Products extends CI_Controller {
     }
   }
 
-  function delete($id) {
+  function delete() {
+    $id = $this->uri->segment(3);
     $this->load->model('product_model');
 
     if (isset($id))
       $this->product_model->delete($id);
 
     //Then we redirect to the index page again
-    redirect('products/index', 'refresh');
+    redirect('admin/product_management', 'refresh');
   }
 
 

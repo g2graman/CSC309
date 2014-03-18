@@ -5,7 +5,6 @@ class Product_model extends CI_Model {
 
 	function getAll()
 	{
-		echo 'get';
 		$query = $this->db->get('product');
 		return $query->result('Product');
 	}
@@ -13,7 +12,7 @@ class Product_model extends CI_Model {
 	function get($id)
 	{
 		$query = $this->db->get_where('product',array('id' => $id));
-
+		$result = $query->result();
 		return $query->row(0,'Product');
 	}
 
