@@ -20,6 +20,13 @@ class Login extends CI_Controller {
     }
 
     function customer() {
+      if(!isset($this->session->userdata['total'])){
+        $this->session->set_userdata(array('total' => 0));
+      }
+
+      if(!isset($this->session->userdata['total_quantity'])){
+        $this->session->set_userdata(array('total_quantity' => 0));
+      }
       $this->load->view('layout/header.php');
       $this->load->view('layout/navbar.php');
       $this->load->view('customer/index.php');

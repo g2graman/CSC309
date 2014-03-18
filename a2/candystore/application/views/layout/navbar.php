@@ -16,17 +16,19 @@ echo '<div class="container-fluid">';
   if(isset($this->session->userdata['login'])){
     echo '<p class="navbar-text navbar-right">Signed in as ';
 	echo '<a class="navbar-link" href="#">' . $this->session->userdata['login'];
+  echo '  |  ';
+  echo 'Cart Total: ' . $this->session->userdata['total'];
+  echo '  |  ';
   echo '<a href="' . base_url() .'login/logout">';
-	echo '<button class="btn btn-default btn-inverse">';
 	echo 'Logout';
-	echo '</button>';
   echo '</a>';
   } else {
-	echo '<p class="navbar-text navbar-right">Not logged in';
-	echo '<a class="navbar-link" href="#">';
-	echo '<button class="btn btn-default btn-inverse">';
+	echo '<p class="navbar-text navbar-right">';
+  echo 'Cart Total: ' . $this->session->userdata['total'];
+  echo '  |  ';
+  echo '<a href="' . base_url() .'login/login">';
 	echo 'Login';
-	echo '</button>';
+	echo '</a>';
   }
 echo '</a>';
 echo '</p>';
