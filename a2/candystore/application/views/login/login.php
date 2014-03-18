@@ -1,8 +1,4 @@
-<?php
-
-	$this->load->view('layout/header.php');
-
-?>
+<br><br><br>
 	<div class="container-fluid">
 	<div class="row vertical-center-row">
 			<div class="col-lg-12">

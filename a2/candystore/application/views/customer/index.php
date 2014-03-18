@@ -1,10 +1,4 @@
-<?php
-
-	echo '<div style="padding-top:60px;"></div>'
-
-?>
-
-<div class="center">
+<div class="ourcenter">
 
 <h1>Welcome <?php echo $this->session->userdata['first']; ?></h1>
 

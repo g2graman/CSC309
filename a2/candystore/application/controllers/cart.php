@@ -63,17 +63,22 @@ class Cart extends CI_Controller {
           $this->session->set_userdata(array('total_quantity' => 0));
         }
         $this->load->view('layout/header.php');
+        $this->load->view('layout/navbar.php');
         $this->show();
-        //$this->collect_user_info();
-        //$this->verify_user_info();
-        //$this->process_order();
-        //$this->display_receipt();
-        //$this->email_receipt();
       } else {
         $data = array(
           'error' => 'You are not currently logged in. Please login or create an account to continue.',
           'prev' => 'cart/checkout'
         );
+        if(!isset($this->session->userdata['total'])){
+          $this->session->set_userdata(array('total' => 0));
+        }
+
+        if(!isset($this->session->userdata['total_quantity'])){
+          $this->session->set_userdata(array('total_quantity' => 0));
+        }
+        $this->load->view('layout/header.php');
+        $this->load->view('layout/navbar.php');
         $this->load->model('login_model');
         $this->load->view('login/login.php', $data);
       }

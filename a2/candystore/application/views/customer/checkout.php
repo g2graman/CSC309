@@ -1,8 +1,9 @@
+<div class="ourcenter">
+
 <h2>Submit order</h2>
 
 <?php
   if(isset($show_output)){
-    echo 'show output';
     echo $show_output;
   }
 
@@ -31,3 +32,4 @@
 
   echo '<a href=' . base_url() .'/login>Return</a>';
 ?>
+</div>

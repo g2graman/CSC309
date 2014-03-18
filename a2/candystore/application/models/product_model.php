@@ -80,11 +80,6 @@ class Product_model extends CI_Model {
 			$browsing .= '</div>';
 			$browsing .= '</div>';
 			$browsing .= '</div>';
-
-			//Print out the total cost
-			if(isset($this->session->userdata['total'])) {
-					$browsing .= '<p>'. $this->session->userdata['total'] .'</p>';
-			}
 		} else {
 			$browsing .= 'no products';
 		}
@@ -111,11 +106,14 @@ class Product_model extends CI_Model {
 			$browsing .= '<th></th>';
 			$browsing .= '<th>Product Name</th>';
 			$browsing .= '<th>Quantity</th>';
+			$browsing .= '<th>Item Cost</th>';
 			$browsing .= '<th>Total Cost</th>';
 			$browsing .= '</tr>';
 			$browsing .= '</thead>';
 			$browsing .= '<tbody>';
 			$counter = 0;
+			$quantity = 0;
+			$total_cost = 0;
 			foreach($products as $product) {
 				if (isset($this->session->userdata[$product->id]) && $this->session->userdata[$product->id] > 0) {
 					$counter = $counter + 1;
@@ -127,15 +125,19 @@ class Product_model extends CI_Model {
 					$browsing .= '</div></td>';
 					$browsing .= '<td>' . $product->name . '</td>';
 					$browsing .= '<td>' . $this->session->userdata[$product->id] . '</td>';
+					$browsing .= '<td>' . $product->price . '</td>';
 					$browsing .= '<td>' . $product->price * $this->session->userdata[$product->id] . '</td>';
 					$browsing .= '</tr>';
+
+					$quantity = $quantity + $this->session->userdata[$product->id];
+					$total_cost = $total_cost + $product->price * $this->session->userdata[$product->id];
 
 				}
 			}
 
 			$browsing .= '</tbody>';
 			$browsing .= '</table>';
-			$browsing .= '<div class="panel-footer">DETAILS OF TOTAL</div>';
+			$browsing .= '<div class="panel-footer">Total Cost: $'. $total_cost . '<br>Total Quantity: '. $quantity .'</div>';
 			$browsing .= '</div>';
 			$browsing .= '</div>';
 			$browsing .= '</div>';

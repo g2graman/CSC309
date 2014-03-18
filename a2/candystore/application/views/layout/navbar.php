@@ -5,7 +5,7 @@ echo '<nav class="navbar navbar-inverse navbar-embossed navbar-fixed-top" role="
 echo '<div class="navbar-header">';
 echo '<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">';
 echo '</button>';
-echo '<a class="navbar-brand" href="#">FRANSHNI CANDY STORE</a>';
+echo '<a class="navbar-brand" href="' . base_url() . 'cart/browse">FRANSHNI CANDY STORE</a>';
 echo '</div>';
 echo '<div class="collapse navbar-collapse" id="navbar-collapse-01">';
 echo '<ul class="nav navbar-nav">';
