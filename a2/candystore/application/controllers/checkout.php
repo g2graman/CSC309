@@ -77,7 +77,7 @@ class Checkout extends CI_Controller {
       $this->load->library('session');
       $this->load->model('admin_model');
 
-      $admin_info = $this->admin->get_admin_info();
+      $admin_info = $this->admin_model->get_admin_info();
 
       $this->email->initialize($config);
       $this->email->from($admin_info->email, $admin_info->first . ' ' . $admin_info->last);

@@ -140,6 +140,8 @@ class Login extends CI_Controller {
     }
 
     function create_user(){
+      $this->load->view('layout/header.php');
+      $this->load->view('layout/navbar.php');
       $this->load->view('login/new_user.php');
     }
 
@@ -165,10 +167,14 @@ class Login extends CI_Controller {
           $this->load->view('login/success.php');
           $this->load->view('login/login.php');
         } else {
-          echo 'Error: An account with your login or email already exists.';
-          $this->load->view('login/new_user.php');
+          $this->load->view('layout/header.php');
+          $this->load->view('layout/navbar.php');
+          $data = array('error' => 'Error: An account with your login or email already exists.');
+          $this->load->view('login/new_user.php', $data);
         }
       } else {
+        $this->load->view('layout/header.php');
+        $this->load->view('layout/navbar.php');
         $this->load->view('login/new_user.php');
       }
 

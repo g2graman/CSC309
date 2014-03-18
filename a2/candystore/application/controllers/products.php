@@ -27,6 +27,8 @@ class Products extends CI_Controller {
     }
 
     function newForm() {
+        $this->load->view('layout/header.php');
+        $this->load->view('layout/navbar.php');
         $this->load->view('product/newForm.php');
     }
 
@@ -36,6 +38,7 @@ class Products extends CI_Controller {
       $this->form_validation->set_rules('description','Description','required');
       $this->form_validation->set_rules('price','Price','required');
 
+      $this->load->library('upload');
       $fileUploadSuccess = $this->upload->do_upload();
 
       if ($this->form_validation->run() == true && $fileUploadSuccess) {
@@ -52,7 +55,7 @@ class Products extends CI_Controller {
         $this->product_model->insert($product);
 
         //Then we redirect to the index page again
-        redirect('products/index', 'refresh');
+        redirect('admin/product_management', 'refresh');
       }
       else {
         if ( !$fileUploadSuccess) {
@@ -60,8 +63,7 @@ class Products extends CI_Controller {
           $this->load->view('product/newForm.php',$data);
           return;
         }
-
-        $this->load->view('product/newForm.php');
+        redirect('admin/product_management', 'refresh');
       }
     }
 

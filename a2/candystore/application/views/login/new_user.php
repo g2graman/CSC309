@@ -1,8 +1,4 @@
-<?php
-
-  $this->load->view('layout/header.php');
-
-?>
+<div class="ourcenter"><br>
   <div class="container-fluid">
   <div class="row vertical-center-row">
       <div class="col-lg-12">
@@ -15,6 +11,7 @@
                     </div>
                     <div class="panel-body">
                       <center>We're excited you want to shop with us! Create an account and enjoy the benefits!</center>
+                      <center><?php if(isset($error){echo $error; } ?></center>
                     </div>
 
                     <?php
@@ -78,3 +75,4 @@
             </div>
         </div>
       </div>
+</div>
