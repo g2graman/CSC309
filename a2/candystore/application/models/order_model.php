@@ -34,6 +34,7 @@ class order_model extends CI_Model {
       $order_output .= '<th>Order ID</th>';
       $order_output .= '<th>Customer Name</th>';
       $order_output .= '<th>Date</th>';
+      $order_output .= '<th>Time</th>';
       $order_output .= '<th>Total Cost</th>';
       $order_output .= '</tr>';
       $order_output .= '</thead>';
@@ -49,13 +50,14 @@ class order_model extends CI_Model {
         $order_output .= '<td>' . $order->id . '</td>';
         $order_output .= '<td>' . $customer_info->first . ' ' . $customer_info->last .'</td>';
         $order_output .= '<td>' . $order->order_date .'</td>';
+        $order_output .= '<td>' . $order->order_time .'</td>';
         $order_output .= '<td> ' . $order->total . '</td>';
         $order_output .= '</tr>';
 
 
       }
     } else {
-      return 'Error generating order output';
+      return 'No orders currently exist in the database.';
     }
 
     $order_output .= '</tbody>';
@@ -117,20 +119,22 @@ class order_model extends CI_Model {
         $item_counter = 0;
         $quantity_counter = 0;
         if($order_item_query->num_rows() > 0){
-          foreach($order_items as $item){
-            $product_info = $this->get_product_info($item->product_id);
-            $product_price = $product_info->price;
-            $product_name = $product_info->name;
-    			  $item_counter = $item_counter + 1;
-            $quantity_counter = $quantity_counter + $item->quantity;
-    			  $receipt_output .= '<tr>';
-    			  $receipt_output .= '<td>' . $item_counter . '</td>';
-    			  $receipt_output .= '<td>' . $product_name .'</td>';
-    			  $receipt_output .= '<td>' . $product_price .'</td>';
-    			  $receipt_output .= '<td> ' . $item->quantity . '</td>';
-    			  $receipt_output .= '<td> ' . $product_price * $item->quantity . '</td>';
-    			  $receipt_output .= '</tr>';
-            }
+		  foreach($order_items as $item){
+			if($item->quantity > 0) {
+			$product_info = $this->get_product_info($item->product_id);
+			$product_price = $product_info->price;
+			$product_name = $product_info->name;
+				  $item_counter = $item_counter + 1;
+			$quantity_counter = $quantity_counter + $item->quantity;
+				  $receipt_output .= '<tr>';
+				  $receipt_output .= '<td>' . $item_counter . '</td>';
+				  $receipt_output .= '<td>' . $product_name .'</td>';
+				  $receipt_output .= '<td>' . $product_price .'</td>';
+				  $receipt_output .= '<td> ' . $item->quantity . '</td>';
+				  $receipt_output .= '<td> ' . $product_price * $item->quantity . '</td>';
+				  $receipt_output .= '</tr>';
+			}
+           }
           }
 
 		    $receipt_output .= '</tbody>';
