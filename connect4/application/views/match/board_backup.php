@@ -10,7 +10,7 @@
 		var otherUser = "<?= $otherUser->login ?>";
 		var user = "<?= $user->login ?>";
 		var status = "<?= $status ?>";
-
+		
 		$(function(){
 			$('body').everyTime(2000,function(){
 					if (status == 'waiting') {
@@ -23,7 +23,7 @@
 									status = 'playing';
 									$('#status').html('Playing ' + otherUser);
 								}
-
+								
 						});
 					}
 					var url = "<?= base_url() ?>board/getMsg";
@@ -38,49 +38,50 @@
 			});
 
 			$('form').submit(function(){
-					var arguments = $(this).serialize();
-					var url = "<?= base_url() ?>board/postMsg";
-					$.post(url,arguments, function (data,textStatus,jqXHR){
-							var conversation = $('[name=conversation]').val();
-							var msg = $('[name=msg]').val();
-							$('[name=conversation]').val(conversation + "\n" + user + ": " + msg);
-							});
-					return false;
-					});
-			});
-
+				var arguments = $(this).serialize();
+				var url = "<?= base_url() ?>board/postMsg";
+				$.post(url,arguments, function (data,textStatus,jqXHR){
+						var conversation = $('[name=conversation]').val();
+						var msg = $('[name=msg]').val();
+						$('[name=conversation]').val(conversation + "\n" + user + ": " + msg);
+						});
+				return false;
+				});	
+		});
+	
 	</script>
-	</head>
-<body>
+	</head> 
+<body>  
 	<h1>Game Area</h1>
 
 	<div>
-	Hello <?= $user->fullName() ?>  <?= anchor('account/logout','(Logout)') ?>
+	Hello <?= $user->fullName() ?>  <?= anchor('account/logout','(Logout)') ?>  
 	</div>
-
-	<div id='status'>
-	<?php
+	
+	<div id='status'> 
+	<?php 
 		if ($status == "playing")
 			echo "Playing " . $otherUser->login;
 		else
 			echo "Wating on " . $otherUser->login;
 	?>
 	</div>
-
-<?php
-
+	
+<?php 
+	
 	echo form_textarea('conversation');
-
+	
 	echo form_open();
 	echo form_input('msg');
 	echo form_submit('Send','Send');
 	echo form_close();
-
+	
 ?>
-
-
-
-
+	
+	
+	
+	
 </body>
 
 </html>
+

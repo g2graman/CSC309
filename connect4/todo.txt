@@ -1,0 +1,18 @@
+Things to note/questions:
+
+ - What type of board type do we want?
+ - What input do we require for the board?
+ - Will our board have images? or just be a text board?
+    - if we do images, I vote for a something abnormal, like doge vs. gaben
+      or luke vs. darth vader or harry vs. voldermort, or a pineapple vs. an
+      umbrella (coz why the hell not?)
+    - actually.. if we're being adventurous, we could let them pick who they
+      want to be (or randomly assign it to them) out of a list of possible
+      choices, use session to track which one was "selected" since we can't
+      make changes to the db schema, and make sure that the two players are
+      not the same...
+  - Can the players click on the spot they want their piece to go
+    or will they need to type in a location co-ordinate?
+ - Will we use location co-ordinates to figure out which piece to play?
+ - How would we determine who the winner of the board is
+ - Check for illegal moves

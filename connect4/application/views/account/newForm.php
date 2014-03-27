@@ -11,31 +11,42 @@
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
 		<script>
 			function checkPassword() {
-				var p1 = $("#pass1"); 
+				var p1 = $("#pass1");
 				var p2 = $("#pass2");
-				
+
 				if (p1.val() == p2.val()) {
 					p1.get(0).setCustomValidity("");  // All is well, clear error message
 					return true;
-				}	
+				}
 				else	 {
 					p1.get(0).setCustomValidity("Passwords do not match");
 					return false;
 				}
 			}
+
+			$(function(){
+				$("#reload").click(function(){
+					$("#captcha").attr('src', '<?php echo site_url('secureimagetest/securimage');?>');
+				});
+			});
 		</script>
-	</head> 
-<body>  
+	</head>
+<body>
 	<h1>New Account</h1>
-<?php 
+<?php
+	if(isset($error)){
+		echo $error;
+	}
+
+	$this->load->helper('html');
 	echo form_open('account/createNew');
-	echo form_label('Username'); 
+	echo form_label('Username');
 	echo form_error('username');
 	echo form_input('username',set_value('username'),"required");
-	echo form_label('Password'); 
+	echo form_label('Password');
 	echo form_error('password');
 	echo form_password('password','',"id='pass1' required");
-	echo form_label('Password Confirmation'); 
+	echo form_label('Password Confirmation');
 	echo form_error('passconf');
 	echo form_password('passconf','',"id='pass2' required oninput='checkPassword();'");
 	echo form_label('First');
@@ -47,10 +58,16 @@
 	echo form_label('Email');
 	echo form_error('email');
 	echo form_input('email',set_value('email'),"required");
+	echo '<br><br>';
+	echo img(array('src' => site_url('secureimagetest/securimage'), 'alt' => 'captcha', 'id' => 'captcha'));
+	echo '<br>';
+	echo form_label('captcha', 'Type the captcha code');
+	echo form_input(array('name' => 'captcha'));
+	echo form_error('captcha');
 	echo form_submit('submit', 'Register');
 	echo form_close();
-?>	
+?>
+
 </body>
 
 </html>
-
