@@ -56,6 +56,10 @@ class Board extends CI_Controller {
 		$this->load->view('match/board',$data);
     }
 
+    function validateMove() {
+      echo 'fuck. im lost';
+    }
+
  	function postMsg() {
  		$this->load->library('form_validation');
  		$this->form_validation->set_rules('msg', 'Message', 'required');
