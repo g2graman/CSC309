@@ -31,8 +31,7 @@
 						if (data && data.status=='success') {
 							var conversation = $('[name=conversation]').val();
 							var msg = data.message;
-							if (msg.length > 0)
-								$('[name=conversation]').val(conversation + "\n" + otherUser + ": " + msg);
+							$('[name=conversation]').val(conversation + "\n" + otherUser + ": " + msg);
 						}
 					});
 			});
@@ -49,13 +48,88 @@
 					});
 			});
 
-
-
 	</script>
 	</head>
 <body>
 	<h1>Game Area</h1>
+	<style type="text/css">
+.tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+.tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+.tftable tr {background-color:#d4e3e5;}
+.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+.tftable tr:hover {background-color:#ffffff;}
+</style>
 
+<table class="tftable" border="1" name="board">
+<tr><td id="00">Row:0 Cell:0</td>
+	<td id="01">Row:0 Cell:1</td>
+	<td id="02">Row:0 Cell:2</td>
+	<td id="03">Row:0 Cell:3</td>
+	<td id="04">Row:0 Cell:4</td>
+	<td id="05">Row:0 Cell:5</td>
+	<td id="06">Row:0 Cell:6</td></tr>
+<tr><td id="10">Row:1 Cell:0</td>
+	<td id="11">Row:1 Cell:1</td>
+	<td id="12">Row:1 Cell:2</td>
+	<td id="13">Row:1 Cell:3</td>
+	<td id="14">Row:1 Cell:4</td>
+	<td id="15">Row:1 Cell:5</td>
+	<td id="16">Row:1 Cell:6</td></tr>
+<tr><td id="20">Row:2 Cell:0</td>
+	<td id="21">Row:2 Cell:1</td>
+	<td id="22">Row:2 Cell:2</td>
+	<td id="23">Row:2 Cell:3</td>
+	<td id="24">Row:2 Cell:4</td>
+	<td id="25">Row:2 Cell:5</td>
+	<td id="26">Row:2 Cell:6</td></tr>
+<tr><td id="30">Row:5 Cell:0</td>
+	<td id="31">Row:5 Cell:1</td>
+	<td id="32">Row:5 Cell:2</td>
+	<td id="33">Row:5 Cell:3</td>
+	<td id="34">Row:5 Cell:4</td>
+	<td id="35">Row:5 Cell:5</td>
+	<td id="36">Row:5 Cell:6</td></tr>
+<tr><td id="40">Row:6 Cell:0</td>
+	<td id="41">Row:6 Cell:1</td>
+	<td id="42">Row:6 Cell:2</td>
+	<td id="43">Row:6 Cell:3</td>
+	<td id="44">Row:6 Cell:4</td>
+	<td id="45">Row:6 Cell:5</td>
+	<td id="46">Row:6 Cell:6</td></tr>
+</table><br><br>
+
+<script> $('table').find('td').click(function(){
+								var id = $(this).attr('id');
+								var url = "<?= base_url() ?>board/postMsg";
+								$.post(url, {'id': id}, function (data,textStatus,jqXHR){}, 'json');
+						return false;});
+</script>
+
+
+<!-- <?php
+	// print_r($_SESSION);
+		// $script = '';
+		// $script .= "<script> $('table').find('td').click(function(){";
+		// // $script .= "var id = $(this).attr('id');";
+		// $script .= "var id = new Array();";
+		// $script .= "id[0] = $(this).attr('id');";
+		// //$script .= "alert(id);";
+		// $script .= 'var url ="' . base_url() . 'board/postMsg";';
+		// $script .= "$.post(url, id);";
+		//
+		//
+		// // $script .= "var id = $(this).attr('id');";
+	  // // $script .= "var arguments = " . $this->match_model->getBoard() . ";";
+		// // $script .= 'var url ="' . base_url() . '"board/postMsg;';
+		// // $script .= 'alert("shits going down");';
+		// // //echo "$.post(url,arguments, function (data,textStatus,jqXHR){";
+		// // //echo "		$('[id=45]').val('1');";
+		// // //echo "	}, 'json');";
+		// $script .= "return false;});";
+		// $script .= "</script>";
+		// echo $script;
+		// print_r($this->match_model->getBoard());
+?> -->
 	<div>
 	Hello <?= $user->fullName() ?>  <?= anchor('account/logout','(Logout)') ?>
 	</div>
@@ -69,177 +143,11 @@
 	?>
 	</div>
 
-
-	<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-</style>
-<?php echo form_open(); ?>
-	<table class="tg">
-	  <tr>
-	    <th class="tg-031e">
-					<?php /*if(isset($thispos) && $thispos = player1){
-								echo '<img src="plyar1">';
-							 else if(player2){
-
-							} else {
-								echo '<input type="radio" name="select" value="p00">Select';
-							}
-					} */ ?>
-			</th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p01">Select
-			</th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p02">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p03">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p04">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p05">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p06">Select
-			</th></th>
-	  </tr>
-	  <tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p10">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p11">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p12">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p13">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p14">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p15">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p16">Select
-				</th></th>
-			</tr>
-	  <tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p20">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p21">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p22">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p23">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p24">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p25">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p26">Select
-				</th></th>
-			</tr>
-	  <tr>
-			<th class="tg-031e">
-					<input type="radio" name="select" value="p30">Select
-			</th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p31">Select
-			</th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p32">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p33">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p34">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p35">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p36">Select
-			</th></th>
-		</tr>
-		<tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p40">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p41">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p42">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p43">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p44">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p45">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p46">Select
-				</th></th>
-			</tr>
-		<tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p50">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p51">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p52">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p53">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p54">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p55">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p56">Select
-				</th></th>
-			</tr>
-	</table>
-
-
-
-
-
-
-
-
-
-
-
-
 <?php
 
 	echo form_textarea('conversation');
 
-
+	echo form_open();
 	echo form_input('msg');
 	echo form_submit('Send','Send');
 	echo form_close();

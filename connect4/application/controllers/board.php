@@ -6,6 +6,7 @@ class Board extends CI_Controller {
     		// Call the Controller constructor
 	    	parent::__construct();
 	    	session_start();
+        $this->load->model('match_model');
     }
 
     public function _remap($method, $params = array()) {
@@ -56,49 +57,51 @@ class Board extends CI_Controller {
 		$this->load->view('match/board',$data);
     }
 
-    function validateMove() {
-      echo 'fuck. im lost';
-    }
-
  	function postMsg() {
- 		$this->load->library('form_validation');
- 		$this->form_validation->set_rules('msg', 'Message', 'required');
+      // echo "SOMETHING HAPPENED?";
+     $id = $this->input->post('id');
 
- 		if ($this->form_validation->run() == TRUE) {
- 			$this->load->model('user_model');
- 			$this->load->model('match_model');
+     if($this->match_model->validateMove($id)) {
 
- 			$user = $_SESSION['user'];
+     }
 
- 			$user = $this->user_model->getExclusive($user->login);
- 			if ($user->user_status_id != User::PLAYING) {
-				$errormsg="Not in PLAYING state";
- 				goto error;
- 			}
-
- 			$match = $this->match_model->get($user->match_id);
-
- 			$msg = $this->input->post('msg');
-
- 			if ($match->user1_id == $user->id)  {
- 				$msg = $match->u1_msg == ''? $msg :  $match->u1_msg . "\n" . $msg;
- 				$this->match_model->updateMsgU1($match->id, $msg);
- 			}
- 			else {
- 				$msg = $match->u2_msg == ''? $msg :  $match->u2_msg . "\n" . $msg;
- 				$this->match_model->updateMsgU2($match->id, $msg);
- 			}
-
- 			echo json_encode(array('status'=>'success'));
-
- 			return;
- 		}
-
- 		$errormsg="Missing argument";
-
-		error:
-			echo json_encode(array('status'=>'failure','message'=>$errormsg));
- 	}
+   }
+ // 		if ($this->form_validation->run() == TRUE) {
+ // 			$this->load->model('user_model');
+ // 			$this->load->model('match_model');
+   //
+ // 			$user = $_SESSION['user'];
+   //
+ // 			$user = $this->user_model->getExclusive($user->login);
+ // 			if ($user->user_status_id != User::PLAYING) {
+	// 			$errormsg="Not in PLAYING state";
+ // 				goto error;
+ // 			}
+   //
+ // 			$match = $this->match_model->get($user->match_id);
+ // 			$msg = $this->input->post('msg');
+   //
+  //      $msg = $msg;
+   //
+ // 			if ($match->user1_id == $user->id)  {
+ // 				$msg = $match->u1_msg == ''? $msg :  $match->u1_msg . "\n" . $msg;
+ // 				$this->match_model->updateMsgU1($match->id, $msg);
+ // 			}
+ // 			else {
+ // 				$msg = $match->u2_msg == ''? $msg :  $match->u2_msg . "\n" . $msg;
+ // 				$this->match_model->updateMsgU2($match->id, $msg);
+ // 			}
+   //
+ // 			echo json_encode(array('status'=>'success'));
+   //
+ // 			return;
+ // 		}
+   //
+ // 		$errormsg="Missing argument";
+   //
+	// 	error:
+	// 		echo json_encode(array('status'=>'failure','message'=>$errormsg));
+ // 	}
 
 	function getMsg() {
  		$this->load->model('user_model');
@@ -134,7 +137,7 @@ class Board extends CI_Controller {
  		$this->db->trans_commit();
 
  		echo json_encode(array('status'=>'success','message'=>$msg));
-		return;
+		 return;
 
 		transactionerror:
 		$this->db->trans_rollback();
@@ -142,45 +145,5 @@ class Board extends CI_Controller {
 		error:
 		echo json_encode(array('status'=>'failure','message'=>$errormsg));
  	}
-
-   function postMove() {
-     $this->load->library('form_validation');
-     $this->form_validation->set_rules('msg', 'Message', 'required');
-
-     if ($this->form_validation->run() == TRUE) {
-       $this->load->model('user_model');
-       $this->load->model('match_model');
-
-       $user = $_SESSION['user'];
-
-       $user = $this->user_model->getExclusive($user->login);
-       if ($user->user_status_id != User::PLAYING) {
-        $errormsg="Not in PLAYING state";
-         goto error;
-       }
-
-       $match = $this->match_model->get($user->match_id);
-
-       $msg = $this->input->post('msg');
-
-       if ($match->user1_id == $user->id)  {
-         $msg = $match->u1_msg == ''? $msg :  $match->u1_msg . "\n" . $msg;
-         $this->match_model->updateMsgU1($match->id, $msg);
-       }
-       else {
-         $msg = $match->u2_msg == ''? $msg :  $match->u2_msg . "\n" . $msg;
-         $this->match_model->updateMsgU2($match->id, $msg);
-       }
-
-       echo json_encode(array('status'=>'success'));
-
-       return;
-     }
-
-     $errormsg="Missing argument";
-
-    error:
-      echo json_encode(array('status'=>'failure','message'=>$errormsg));
-   }
 
  }
