@@ -82,20 +82,27 @@
 	<td id="24">Row:2 Cell:4</td>
 	<td id="25">Row:2 Cell:5</td>
 	<td id="26">Row:2 Cell:6</td></tr>
-<tr><td id="30">Row:5 Cell:0</td>
-	<td id="31">Row:5 Cell:1</td>
-	<td id="32">Row:5 Cell:2</td>
-	<td id="33">Row:5 Cell:3</td>
-	<td id="34">Row:5 Cell:4</td>
-	<td id="35">Row:5 Cell:5</td>
-	<td id="36">Row:5 Cell:6</td></tr>
-<tr><td id="40">Row:6 Cell:0</td>
-	<td id="41">Row:6 Cell:1</td>
-	<td id="42">Row:6 Cell:2</td>
-	<td id="43">Row:6 Cell:3</td>
-	<td id="44">Row:6 Cell:4</td>
-	<td id="45">Row:6 Cell:5</td>
-	<td id="46">Row:6 Cell:6</td></tr>
+<tr><td id="30">Row:3 Cell:0</td>
+	<td id="31">Row:3 Cell:1</td>
+	<td id="32">Row:3 Cell:2</td>
+	<td id="33">Row:3 Cell:3</td>
+	<td id="34">Row:3 Cell:4</td>
+	<td id="35">Row:3 Cell:5</td>
+	<td id="36">Row:3 Cell:6</td></tr>
+<tr><td id="40">Row:4 Cell:0</td>
+	<td id="41">Row:4 Cell:1</td>
+	<td id="42">Row:4 Cell:2</td>
+	<td id="43">Row:4 Cell:3</td>
+	<td id="44">Row:4 Cell:4</td>
+	<td id="45">Row:4 Cell:5</td>
+	<td id="46">Row:4 Cell:6</td></tr>
+<tr><td id="50">Row:5 Cell:0</td>
+	<td id="51">Row:5 Cell:1</td>
+	<td id="52">Row:5 Cell:2</td>
+	<td id="53">Row:5 Cell:3</td>
+	<td id="54">Row:5 Cell:4</td>
+	<td id="55">Row:5 Cell:5</td>
+	<td id="56">Row:5 Cell:6</td></tr>
 </table><br><br>
 
 <script> $('table').find('td').click(function(){
@@ -104,6 +111,8 @@
 								$.post(url, {'id': id}, function (data,textStatus,jqXHR){}, 'json');
 						return false;});
 </script>
+
+<?php print_r($_SESSION); ?>
 
 
 <!-- <?php
