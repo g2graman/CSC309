@@ -20,7 +20,7 @@ class Board extends CI_Controller {
 
 
     function index() {
-		$user = $_SESSION['user'];
+		    $user = $_SESSION['user'];
 
 	    	$this->load->model('user_model');
 	    	$this->load->model('invite_model');
@@ -54,14 +54,16 @@ class Board extends CI_Controller {
 	    			break;
 	    	}
 
-		$this->load->view('match/board',$data);
+		    $this->load->view('match/board',$data);
     }
 
  	function postMsg() {
       // echo "SOMETHING HAPPENED?";
-     $id = $this->input->post('id');
+     $position = $this->input->post('position');
+     $userID = $this->input->post('userID');
+     error_log('path: ' . $_SESSION['user']->id . ' 6');
 
-     if($this->match_model->validateMove($id)) {
+     if($this->match_model->validateMove($position, $userID)) {
 
      }
 
@@ -108,6 +110,7 @@ class Board extends CI_Controller {
  		$this->load->model('match_model');
 
  		$user = $_SESSION['user'];
+     error_log('path: ' . $_SESSION['user']->id . ' 7');
 
  		$user = $this->user_model->get($user->login);
  		if ($user->user_status_id != User::PLAYING) {

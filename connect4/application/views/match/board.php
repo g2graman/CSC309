@@ -26,6 +26,7 @@
 
 						});
 					}
+					//Get player's updated state here
 					var url = "<?= base_url() ?>board/getMsg";
 					$.getJSON(url, function (data,text,jqXHR){
 						if (data && data.status=='success') {
@@ -61,54 +62,80 @@
 </style>
 
 <table class="tftable" border="1" name="board">
-<tr><td id="00">Row:0 Cell:0</td>
-	<td id="01">Row:0 Cell:1</td>
-	<td id="02">Row:0 Cell:2</td>
-	<td id="03">Row:0 Cell:3</td>
-	<td id="04">Row:0 Cell:4</td>
-	<td id="05">Row:0 Cell:5</td>
-	<td id="06">Row:0 Cell:6</td></tr>
-<tr><td id="10">Row:1 Cell:0</td>
-	<td id="11">Row:1 Cell:1</td>
-	<td id="12">Row:1 Cell:2</td>
-	<td id="13">Row:1 Cell:3</td>
-	<td id="14">Row:1 Cell:4</td>
-	<td id="15">Row:1 Cell:5</td>
-	<td id="16">Row:1 Cell:6</td></tr>
-<tr><td id="20">Row:2 Cell:0</td>
-	<td id="21">Row:2 Cell:1</td>
-	<td id="22">Row:2 Cell:2</td>
-	<td id="23">Row:2 Cell:3</td>
-	<td id="24">Row:2 Cell:4</td>
-	<td id="25">Row:2 Cell:5</td>
-	<td id="26">Row:2 Cell:6</td></tr>
-<tr><td id="30">Row:3 Cell:0</td>
-	<td id="31">Row:3 Cell:1</td>
-	<td id="32">Row:3 Cell:2</td>
-	<td id="33">Row:3 Cell:3</td>
-	<td id="34">Row:3 Cell:4</td>
-	<td id="35">Row:3 Cell:5</td>
-	<td id="36">Row:3 Cell:6</td></tr>
-<tr><td id="40">Row:4 Cell:0</td>
-	<td id="41">Row:4 Cell:1</td>
-	<td id="42">Row:4 Cell:2</td>
-	<td id="43">Row:4 Cell:3</td>
-	<td id="44">Row:4 Cell:4</td>
-	<td id="45">Row:4 Cell:5</td>
-	<td id="46">Row:4 Cell:6</td></tr>
-<tr><td id="50">Row:5 Cell:0</td>
-	<td id="51">Row:5 Cell:1</td>
-	<td id="52">Row:5 Cell:2</td>
-	<td id="53">Row:5 Cell:3</td>
-	<td id="54">Row:5 Cell:4</td>
-	<td id="55">Row:5 Cell:5</td>
-	<td id="56">Row:5 Cell:6</td></tr>
+<tr><td id="00">0</td>
+	<td id="01">0</td>
+	<td id="02">0</td>
+	<td id="03">0</td>
+	<td id="04">0</td>
+	<td id="05">0</td>
+	<td id="06">0</td></tr>
+<tr><td id="10">0</td>
+	<td id="11">0</td>
+	<td id="12">0</td>
+	<td id="13">0</td>
+	<td id="14">0</td>
+	<td id="15">0</td>
+	<td id="16">0</td></tr>
+<tr><td id="20">0</td>
+	<td id="21">0</td>
+	<td id="22">0</td>
+	<td id="23">0</td>
+	<td id="24">0</td>
+	<td id="25">0</td>
+	<td id="26">0</td></tr>
+<tr><td id="30">0</td>
+	<td id="31">0</td>
+	<td id="32">0</td>
+	<td id="33">0</td>
+	<td id="34">0</td>
+	<td id="35">0</td>
+	<td id="36">0</td></tr>
+<tr><td id="40">0</td>
+	<td id="41">0</td>
+	<td id="42">0</td>
+	<td id="43">0</td>
+	<td id="44">0</td>
+	<td id="45">0</td>
+	<td id="46">0</td></tr>
+<tr><td id="50">0</td>
+	<td id="51">0</td>
+	<td id="52">0</td>
+	<td id="53">0</td>
+	<td id="54">0</td>
+	<td id="55">0</td>
+	<td id="56">0</td></tr>
 </table><br><br>
 
-<script> $('table').find('td').click(function(){
+<script> function validateMove(id) {
+							var row = id.toString().charAt(0); //Useless
+							var col = id.toString().charAt(1);
+
+							var last = 5;
+							var position = '';
+							while(last >= 0){
+								position = '#' + last.toString() + col.toString();
+								console.log(position);
+								if($(position).text() == 0) {
+									console.log('Found valid position in the column at' + position);
+									return position
+								}
+								last -= 1;
+							}
+							return false;
+						}
+
+
+						$('table').find('td').click(function(){
 								var id = $(this).attr('id');
+								var userID = "<?= $user->id; ?>";
+								var position = validateMove(id);
+								if (position != false) {
+									$(position).text(userID);
+								} else {
+									alert('INVALID MOVE!');
+								}
 								var url = "<?= base_url() ?>board/postMsg";
-								$.post(url, {'id': id}, function (data,textStatus,jqXHR){}, 'json');
+								$.post(url, {'position': position, 'userID': userID}, function (data,textStatus,jqXHR){}, 'json');
 						return false;});
 </script>
 

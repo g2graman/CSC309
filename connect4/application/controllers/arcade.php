@@ -20,6 +20,7 @@ class Arcade extends CI_Controller {
 
     function index() {
 		    	$data['user']=$_SESSION['user'];
+          error_log('path: ' . $_SESSION['user']->id . ' 1');
 		    	if (isset($_SESSION['errmsg'])) {
 		    		$data['errmsg']=	$_SESSION['errmsg'];
 		    		unset($_SESSION['errmsg']);
@@ -37,6 +38,7 @@ class Arcade extends CI_Controller {
 
     function getInvitation() {
 	    	$user = $_SESSION['user'];
+        error_log('path: ' . $_SESSION['user']->id . ' 2');
 
 	    	$this->load->model('user_model');
 	    	$user = $this->user_model->get($user->login);
@@ -58,6 +60,7 @@ class Arcade extends CI_Controller {
 
     function acceptInvitation() {
     	$user = $_SESSION['user'];
+      error_log('path: ' . $_SESSION['user']->id . ' 3');
 
     	$this->load->model('user_model');
     	$this->load->model('invite_model');
@@ -100,9 +103,9 @@ class Arcade extends CI_Controller {
       $boardArray[0] = array(0,0,0,0,0,0,0);
       $boardArray[1] = array(0,0,0,0,0,0,0);
       $boardArray[2] = array(0,0,0,0,0,0,0);
-      $boardArray[3] = array(0,0,0,0,0,0,0);
-      $boardArray[4] = array(0,0,0,0,0,0,0);
-      $boardArray[5] = array(0,0,0,0,0,0,0);
+      $boardArray[3] = array(0,0,0,0,0,1,0);
+      $boardArray[4] = array(0,0,0,0,0,1,1);
+      $boardArray[5] = array(1,2,2,1,2,1,2);
 
       $encodedBoard = json_encode(array('state'=> $boardArray, 'current_user' => $hostUser->id));
       $this->db->update('match', array('board_state'=> $encodedBoard));
@@ -122,6 +125,7 @@ class Arcade extends CI_Controller {
 
 	function declineInvitation() {
 		$user = $_SESSION['user'];
+    error_log('path: ' . $_SESSION['user']->id . ' 4');
 
 		$this->load->model('user_model');
 		$this->load->model('invite_model');
@@ -157,6 +161,8 @@ class Arcade extends CI_Controller {
 
 	function checkInvitation() {
 		$user = $_SESSION['user'];
+    error_log('path: ' . $_SESSION['user']->id . ' 5');
+    error_log('checkInvitation user: ' . $_SESSION['user']->id);
 
 		$this->load->model('user_model');
 		$this->load->model('invite_model');
@@ -188,6 +194,7 @@ class Arcade extends CI_Controller {
 
 		$user1 = $_SESSION['user'];
 		$user2 = null;
+    error_log('path: ' . $_SESSION['user']->id . ' 6');
 
 		$this->load->model('user_model');
 		$this->load->model('invite_model');

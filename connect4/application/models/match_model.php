@@ -49,26 +49,41 @@ class Match_model extends CI_Model {
 
 	function getBoard() {
 		//print_r($_SESSION);
+		error_log('inside getBoard');
+		error_log('user id: ' . $_SESSION['user']->id);
+		error_log('match id: ' . $_SESSION['user']->match_id);
 		if(isset($_SESSION['user'])){
+				error_log('gb1');
 				$matchId = $_SESSION['user']->match_id;;
 				$query = $this->db->get_where('match', array('id' => $matchId));
 				$result = $query->result();
 				if ($query && $query->num_rows() > 0) {
+					error_log('gb2');
 					foreach($result as $admin) {
+						error_log('gb3');
+						error_log('user1 id: ' . $admin->user1_id);
+						error_log('user2 id: ' . $admin->user2_id);
+						error_log('board state: ' . $admin->board_state[5][6]);
 						return json_decode($admin->board_state);
 					}
 				} else {
+					error_log('gb4');
 					return false;
 				}
 		} else {
+			error_log('gb5');
 			return false;
 		}
 	}
 
-	function validateMove($id) {
+	function validateMove($id, $userID) {
 
-			$rowNum = substr($id, 0, 1);
+			error_log('userID' . $userID);
+
+			$rowNum = substr($id, 1, 1);
 			$colNum = substr($id, -1);
+
+			error_log('thisisidddddd: ' . $id);
 
 			error_log( $colNum . ' test ' . $rowNum );
 
@@ -79,7 +94,9 @@ class Match_model extends CI_Model {
 			error_log('boardState2: ' . $boardState->state[$rowNum][$colNum]);
 
 			// calculate which position to put it in (if it's valid)
-			$newRowNum = $this->validColumn($boardState->state, $colNum);
+			// $newRowNum = $this->validColumn($boardState->state, $colNum);
+
+			// error_log('newrow: ' . $newRowNum);
 
 			// update board
 			// error_log('player1 id: ' . $_SESSION['player1']);
@@ -93,18 +110,18 @@ class Match_model extends CI_Model {
 			// 	$boardState->state[$newRowNum][$colNum] = 0;
 			// }
 
-			$boardState->state[$newRowNum][$colNum] = $_SESSION['user']->id;
+			$boardState->state[$rowNum][$colNum] = $userID;
 
 			error_log('new board row/col: ' . $boardState->state[$newRowNum][$colNum]);
 
-			$winner = $this->hasWinner($board, $newRowNum, $colNum);
+			// $winner = $this->hasWinner($board, $newRowNum, $colNum);
 
-			if($winner){
-				// winner stuff
-				error_log('winner');
-			} else {
-				$this->updateBoard($boardState->state);
-			}
+			// if($winner){
+			// 	// winner stuff
+			// 	error_log('winner');
+			// } else {
+			// 	$this->updateBoard($boardState->state);
+			// }
 
 	}
 
