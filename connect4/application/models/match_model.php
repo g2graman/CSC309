@@ -76,14 +76,14 @@ class Match_model extends CI_Model {
 		}
 	}
 
-	function validateMove($id, $userID) {
+	function validateMove($position, $userID) {
+
+			error_log('thisisidddddd: ' . $position);
 
 			error_log('userID' . $userID);
 
-			$rowNum = substr($id, 1, 1);
-			$colNum = substr($id, -1);
-
-			error_log('thisisidddddd: ' . $id);
+			$rowNum = substr($position, 1, 1);
+			$colNum = substr($position, -1);
 
 			error_log( $colNum . ' test ' . $rowNum );
 
@@ -92,23 +92,6 @@ class Match_model extends CI_Model {
 			$boardState = $this->getBoard();
 			// error_log('boardState1: ' . $boardState['state']);
 			error_log('boardState2: ' . $boardState->state[$rowNum][$colNum]);
-
-			// calculate which position to put it in (if it's valid)
-			// $newRowNum = $this->validColumn($boardState->state, $colNum);
-
-			// error_log('newrow: ' . $newRowNum);
-
-			// update board
-			// error_log('player1 id: ' . $_SESSION['player1']);
-			// error_log('player2 id: ' . $_SESSION['player2']);
-
-			// if($user->id == $_SESSION['player1']){
-			// 	$boardState->state[$newRowNum][$colNum] = 1;
-			// } else if($user->id == $_SESSION['player2']){
-			// 	$boardState->state[$newRowNum][$colNum] = 2;
-			// } else {
-			// 	$boardState->state[$newRowNum][$colNum] = 0;
-			// }
 
 			$boardState->state[$rowNum][$colNum] = $userID;
 

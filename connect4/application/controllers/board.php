@@ -63,9 +63,39 @@ class Board extends CI_Controller {
      $userID = $this->input->post('userID');
      error_log('path: ' . $_SESSION['user']->id . ' 6');
 
-     if($this->match_model->validateMove($position, $userID)) {
+    //  if($this->match_model->validateMove($position, $userID)) {
+     //
+    //  }
 
-     }
+      error_log('thisisidddddd: ' . $position);
+
+      error_log('userID' . $userID);
+
+      $rowNum = substr($position, 1, 1);
+      $colNum = substr($position, -1);
+
+      error_log( $colNum . ' -> col, row -> ' . $rowNum );
+
+      error_log('match id: ' . $_SESSION['user']->match_id);
+
+      $this->load->model('match_model');
+
+      $boardState = $this->match_model->getBoard();
+      // error_log('boardState1: ' . $boardState['state']);
+      error_log('boardState2: ' . $boardState->state[$rowNum][$colNum]);
+
+      // update value of the board
+      // if($_SESSION['player1'] == $userID){
+      //   $boardState->state[$rowNum][$colNum] = 1;
+      // } else if($_SESSION['player2'] == $userID){
+      //   $boardState->state[$rowNum][$colNum] = 2;
+      // } else {
+      //   error_log('error');
+      // }
+
+      $boardState->state[$rowNum][$colNum] = $userID;
+
+      error_log('new board row/col: ' . $boardState->state[$rowNum][$colNum]);
 
    }
  // 		if ($this->form_validation->run() == TRUE) {
