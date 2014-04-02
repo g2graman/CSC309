@@ -43,7 +43,7 @@ class Match_model extends CI_Model {
 	}
 
 	function updateBoard($board, $newUser) {
-		$encodedBoard = json_encode(array('state'=> $boardArray, 'current_user' => $newUser));
+		$encodedBoard = json_encode(array('state'=> $board, 'current_user' => $newUser));
 		$this->db->update('match', array('board_state'=> $encodedBoard));
 	}
 
@@ -78,24 +78,26 @@ class Match_model extends CI_Model {
 
 	function validateMove($position, $userID) {
 
-			error_log('thisisidddddd: ' . $position);
+		error_log('inside validatemove');
 
-			error_log('userID' . $userID);
-
-			$rowNum = substr($position, 1, 1);
-			$colNum = substr($position, -1);
-
-			error_log( $colNum . ' test ' . $rowNum );
-
-			error_log('match id: ' . $_SESSION['user']->match_id);
-
-			$boardState = $this->getBoard();
-			// error_log('boardState1: ' . $boardState['state']);
-			error_log('boardState2: ' . $boardState->state[$rowNum][$colNum]);
-
-			$boardState->state[$rowNum][$colNum] = $userID;
-
-			error_log('new board row/col: ' . $boardState->state[$rowNum][$colNum]);
+			// error_log('thisisidddddd: ' . $position);
+			//
+			// error_log('userID' . $userID);
+			//
+			// $rowNum = substr($position, 1, 1);
+			// $colNum = substr($position, -1);
+			//
+			// error_log( $colNum . ' test ' . $rowNum );
+			//
+			// error_log('match id: ' . $_SESSION['user']->match_id);
+			//
+			// $boardState = $this->getBoard();
+			// // error_log('boardState1: ' . $boardState['state']);
+			// error_log('boardState2: ' . $boardState->state[$rowNum][$colNum]);
+			//
+			// $boardState->state[$rowNum][$colNum] = $userID;
+			//
+			// error_log('new board row/col: ' . $boardState->state[$rowNum][$colNum]);
 
 			// $winner = $this->hasWinner($board, $newRowNum, $colNum);
 

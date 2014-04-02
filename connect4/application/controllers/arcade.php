@@ -86,6 +86,9 @@ class Arcade extends CI_Controller {
 
       $_SESSION['matchId'] = $matchId;
 
+      $_SESSION['player1'] = $hostUser->id;
+      $_SESSION['player2'] = $user->id;
+
 	    // update status of both users
 	    $this->user_model->updateStatus($user->id,User::PLAYING);
 	    $this->user_model->updateStatus($hostUser->id,User::PLAYING);
@@ -109,6 +112,8 @@ class Arcade extends CI_Controller {
 
       $encodedBoard = json_encode(array('state'=> $boardArray, 'current_user' => $hostUser->id));
       $this->db->update('match', array('board_state'=> $encodedBoard));
+
+      // $this->match_model->updateBoard($boardArray, $hostUser->id);
 
 	    echo json_encode(array('status'=>'success'));
 
@@ -224,6 +229,9 @@ class Arcade extends CI_Controller {
 		$invite = new Invite();
 		$invite->user1_id = $user1->id;
 		$invite->user2_id = $user2->id;
+
+    $_SESSION['player1'] = $user1->id;
+    $_SESSION['player2'] = $user2->id;
 
 		$this->invite_model->insert($invite);
 
