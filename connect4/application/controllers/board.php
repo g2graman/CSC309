@@ -30,11 +30,15 @@ class Board extends CI_Controller {
 	    	$invite = $this->invite_model->get($user->invite_id);
 
 	    	if ($user->user_status_id == User::WAITING) {
+          $data['player1'] = $user->invite_id;
+          $data['player2'] = $user->invite_id;
 	    		$invite = $this->invite_model->get($user->invite_id);
 	    		$otherUser = $this->user_model->getFromId($invite->user2_id);
 	    	}
 	    	else if ($user->user_status_id == User::PLAYING) {
 	    		$match = $this->match_model->get($user->match_id);
+            $data['player1'] = $match->user1_id;
+            $data['player2'] = $match->user2_id;
 	    		if ($match->user1_id == $user->id)
 	    			$otherUser = $this->user_model->getFromId($match->user2_id);
 	    		else
@@ -54,10 +58,6 @@ class Board extends CI_Controller {
 	    	}
 
 		$this->load->view('match/board',$data);
-    }
-
-    function validateMove() {
-      echo 'fuck. im lost';
     }
 
  	function postMsg() {
@@ -143,44 +143,59 @@ class Board extends CI_Controller {
 		echo json_encode(array('status'=>'failure','message'=>$errormsg));
  	}
 
-   function postMove() {
-     $this->load->library('form_validation');
-     $this->form_validation->set_rules('msg', 'Message', 'required');
+   function sendMove() {
+     // get row and column from the get
+     $row = $this->input->get('row');
+     $col = $this->input->get('col');
 
-     if ($this->form_validation->run() == TRUE) {
-       $this->load->model('user_model');
-       $this->load->model('match_model');
+     // load models
+     $this->load->model('match_model');
+     $this->load->model('user_model');
 
-       $user = $_SESSION['user'];
+     $user = $_SESSION['user'];
+     $user = $this->user_model->getExclusive($user->login);
+     if($user->user_status_id != User::PLAYING) {
+       $errormsg = 'Not in Playing State';
+       goto error;
+     }
+     $match = $this->match_model->get($user->match_id);
+     $id = $match->id;
 
-       $user = $this->user_model->getExclusive($user->login);
-       if ($user->user_status_id != User::PLAYING) {
-        $errormsg="Not in PLAYING state";
-         goto error;
-       }
+     $this->match_model->updateMatch($row, $col, $id);
 
-       $match = $this->match_model->get($user->match_id);
+     echo json_encode(array('status'=>'success'));
+     return;
 
-       $msg = $this->input->post('msg');
+     error:
+       echo json_encode(array('status'=>'failure', 'message'=>$errormsg));
 
-       if ($match->user1_id == $user->id)  {
-         $msg = $match->u1_msg == ''? $msg :  $match->u1_msg . "\n" . $msg;
-         $this->match_model->updateMsgU1($match->id, $msg);
-       }
-       else {
-         $msg = $match->u2_msg == ''? $msg :  $match->u2_msg . "\n" . $msg;
-         $this->match_model->updateMsgU2($match->id, $msg);
-       }
+   }
 
-       echo json_encode(array('status'=>'success'));
+   function updateMatch() {
+     $this->load->model('match_model');
+     $this->load->model('user_model');
 
+     $user = $_SESSION['user'];
+     $user = $this->user_model->getExclusive($user->login);
+     if($user->user_status_id != User::PLAYING) {
+       $errormsg = 'Not in Playing State!';
+       goto error;
+     }
+     $match = $this->match_model->get($user->match_id);
+     $matchID = $match->id;
+     $match = $this->match_model->getMove($matchID);
+     if(is_null($match)){
+       $errormsg = "Error: Can't update board";
+       goto error;
+     } else {
+       error_log('match id: ' . $match->id);
+       error_log('match board: ' . json_decode($match->board_state));
+       echo $match->board_state;
        return;
      }
 
-     $errormsg="Missing argument";
-
-    error:
-      echo json_encode(array('status'=>'failure','message'=>$errormsg));
+     error:
+       echo json_encode(array('status'=>'failure', 'message'=>$errormsg));
    }
 
  }
