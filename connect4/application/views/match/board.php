@@ -136,10 +136,12 @@
 		// }
 
 		function winner_helper(rowOrig, colOrig, playerId){
-			console.log('1');
+		console.log('1');
+		console.log('playerid: ' + playerId);
 		var x_streak = 1;
 		for(var i = 1; i < 4; i++){
 			if(x_streak == 4 || (colOrig + i <= 6 && boardCols[colOrig + i].length > rowOrig && boardCols[colOrig + i][rowOrig].id() == playerId)) {
+				console.log('disk.id(): ' + disk.id());
 				x_streak += 1
 				console.log('x_streak: 2a ' + x_streak);
 			} else {
@@ -162,61 +164,66 @@
 			return true;
 		}
 
-		// var y_streak = 1;
-		// for(var i = 1; i < 3; i++){
-		// 	if(y_streak == 4 || (rowOrig - i >= 0 && boardCols[colOrig].length > rowOrig  && boardCols[colOrig][rowOrig - i].id() == playerId)) {
-		// 		y_streak += 1
-		// 	} else {
-		// 		break;
-		// 	}
-		// }
+		var y_streak = 1;
+		for(var i = 1; i < 4; i++){
+			if(y_streak == 4 || (rowOrig - i >= 0 && boardCols[colOrig].length > rowOrig  && boardCols[colOrig][rowOrig - i].id() == playerId)) {
+				y_streak += 1
+				console.log('y_streak: 2e ' + y_streak);
+			} else {
+				break;
+			}
+		}
 
-		// if (y_streak >= 4) {
-		// 	return true;
-		// }
+		if (y_streak >= 4) {
+			return true;
+		}
 
-		// var ld_streak = 1;
-		// for(var i = 1; i < 3; i++){
-		// 	if(ld_streak == 4 || (colOrig - i >= 0 && rowOrig - i >= 0 && boardCols[colOrig - i].length > rowOrig  && boardCols[colOrig - i][rowOrig - i].id() == playerId)) {
-		// 		ld_streak += 1
-		// 	} else {
-		// 		break;
-		// 	}
-		// }
+		var ld_streak = 1;
+		for(var i = 1; i < 4; i++){
+			if(ld_streak == 4 || (colOrig - i >= 0 && rowOrig - i >= 0 && boardCols[colOrig - i].length > rowOrig  && boardCols[colOrig - i][rowOrig - i].id() == playerId)) {
+				ld_streak += 1
+				console.log('ld_streak: 2f ' + ld_streak);
+			} else {
+				break;
+			}
+		}
 
-		// for(var i = 1; i < 3; i++){
-		// 	if(ld_streak == 4 || (colOrig + i <= 6 && rowOrig + i <= 6 && boardCols[colOrig + i].length > rowOrig  && boardCols[colOrig + i][rowOrig + i].id() == playerId)) {
-		// 		ld_streak += 1
-		// 	} else {
-		// 		break;
-		// 	}
-		// }
+		for(var i = 1; i < 4; i++){
+			if(ld_streak == 4 || (colOrig + i <= 6 && rowOrig + i <= 6 && boardCols[colOrig + i].length > rowOrig  && boardCols[colOrig + i][rowOrig + i].id() == playerId)) {
+				ld_streak += 1
+				console.log('ld_streak: 2g ' + ld_streak);
+			} else {
+				break;
+			}
+		}
 
-		// if (ld_streak >= 4) {
-		// 	return true;
-		// }
+		if (ld_streak >= 4) {
+			return true;
+		}
 
-		// var ul_streak = 1;
-		// for(var i = 1; i < 3; i++){
-		// 	if(ul_streak == 4 || (colOrig - i >= 0 && rowOrig + i <= 6 && boardCols[colOrig - i].length > rowOrig  && boardCols[colOrig - i][rowOrig + i].id() == playerId)) {
-		// 		ul_streak += 1
-		// 	} else {
-		// 		break;
-		// 	}
-		// }
+		var ul_streak = 1;
+		for(var i = 1; i < 4; i++){
+			if(ul_streak == 4 || (colOrig - i >= 0 && rowOrig + i <= 6 && boardCols[colOrig - i].length > rowOrig  && boardCols[colOrig - i][rowOrig + i].id() == playerId)) {
+				ul_streak += 1
+				console.log('ul_streak: 2h ' + ul_streak);
+			} else {
+				break;
+			}
+		}
 
-		// for(var i = 0; i < 3; i++){
-		// 	if(ul_streak == 4 || (colOrig + i <= 6 && rowOrig - i >= 0 && boardCols[colOrig + i].length > rowOrig  && boardCols[colOrig + i][rowOrig - i].id() == playerId)) {
-		// 		ul_streak += 1
-		// 	} else {
-		// 		break;
-		// 	}
-		// }
+		for(var i = 1; i < 4; i++){
+			if(ul_streak == 4 || (colOrig + i <= 6 && rowOrig - i >= 0 && boardCols[colOrig + i].length > rowOrig  && boardCols[colOrig + i][rowOrig - i].id() == playerId)) {
+				ul_streak += 1
+				console.log('ul_streak: 2i ' + ul_streak);
+			} else {
+				break;
+			}
+		}
 
-		// if (ul_streak >= 4) {
-		// 	console.log('6');
-		// 	return true;
-		// }
+		if (ul_streak >= 4) {
+			console.log('6');
+			return true;
+		}
 
 		return false;
 	}
@@ -227,10 +234,10 @@
 			console.log('7');
 		// left, right, diagonal left down, diagonal right down, regular down.
 		// call winner_helper on each direction to see if there was a win
-		if(winner_helper(parseInt(disk.row), parseInt(disk.col), parseInt(disk.id()))){
-			console.log('entering winner_helper');
-			end_of_game('win', parseInt(disk.id()));
-		}
+		// if(winner_helper(parseInt(disk.row), parseInt(disk.col), parseInt(disk.id()))){
+		// 	console.log('entering winner_helper');
+		// 	end_of_game('win', parseInt(disk.id()));
+		// }
 		// check if it is a tie
 		if(disks >= 42){
 			end_of_game('tie', parseInt(disk.id()));
