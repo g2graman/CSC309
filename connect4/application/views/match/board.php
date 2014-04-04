@@ -18,7 +18,6 @@
 		var boardCols = [[], [], [], [], [], [], []];
 
 		function Disk(player, row, col){
-			console.log('1');
 			this.playerid = player;
 			this.row = row;
 			this.col = col;
@@ -30,117 +29,118 @@
 
 		// player 1 makes a move
 		$(document).ready(function() {
-			console.log('2');
 			if(userId!=player1){
-				console.log('2a');
 				$('.tile').css('background-color', 'red');
 			} else {
-				console.log('2b');
-				$('.tile').each(function(){
-					$(this).click(function(){disk_handling(this);});
-				});
-				console.log('2c');
+				// if(check_valid_move(this)){
+					$('.tile').each(function(){
+						$(this).click(function(){disk_handling(this);});
+					});
+				// } else {
+					// alert("Error: That is not a valid move");
+				// }
 			}
 
 		});
 
+		function check_valid_move(item){
+			var col = $(item).attr('id');
+			var row = boardCols[col].length;
+
+			if(row >= 7){
+				return false;
+			} else {
+				return true;
+			}
+
+		}
+
 		function disk_handling(item){
-			console.log('3');
+			// determine col and row
+			var col = $(item).attr('id');
+			var row = boardCols[col].length;
+
+			// check if there is space to add another disk on the column
+			if(row >= 6){
+				alert("Error: This is not a valid move");
+				return false;
+			}
+
+			// switch the colors of the arrow buttons
 			$('.tile').each(function() {
 				$(this).off('click');
 			})
 
+			// where we came from
+			var from = 'diskhandler';
+			add_disk(row, col, item, from);
 
-			var col = $(item).attr('id');
-
-			var row = boardCols[col].length;
-			var where = 'dispatcher';
-			animate(row, col, item, where);
-
-			//if(boardCols[col].length <= row){
-			//	if(boardCols[col].length>1)
-					$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':'red'});
-			//	else
-			//		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':'red'});
-			//}
-
-			console.log('3a');
+			$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':'red'});
 
 			var url = '<?php base_url();?>sendMove';
-							console.log('3b');
 
 			$.get(url, {row: row, col: col});
 
-			console.log('3c');
-
 			$('.tile').css('background-color', 'red');
+
 		}
 
 
 	// check for winner
-	function winner(chip){
-		console.log('4');
-		return false;
+	function isWinnerOrTie(disk){
+
+		// if()
+
+		// check if it is a tie
+		if(disks >= 42){
+			end_of_game('tie', disk.playerid);
+		} else {
+			return false;
+		}
 	}
 
-	function animate(row, col, item, where){
-		console.log('------------------------');
-		console.log(row + ' is row and col is ' + col);
+	function winner_helper(){
 
-		console.log('5');
+	}
+
+	function end_of_game($reason, $player){
+		if($reason==='tie'){
+			alert("The game ended in a tie");
+		} else if($reason==='win'){
+			alert("The game ended. " + $player + " won the game");
+		}
+
+		// handle how to end the game here
+		// ie update the status and the database, then return to the mainPage/arcade
+
+	}
+
+	function add_disk(row, col, item, from){
 		disks++;
 		var disk = new Disk(userId, row, col);
 		boardCols[col].push(disk);
 
-		console.log('length: ' + boardCols[col].length)
-
-		// if(winner(disk)){
-		// 	console.log('Winner winner, chicken dinner');
-		// }
-		console.log('5a');
-
-		if(where=='dispatcher'){
+		if(from=='diskhandler'){
 			if(userId == player1){
-				console.log('5b');
 				var color = 'green';
+				var imgUrl = "url(<?= base_url() ?>images/doge.png)";
 			} else {
-				console.log('5c');
 				var color = 'blue';
+				var imgUrl = "url(<?= base_url() ?>images/cat.png)";
 			}
 		} else {
 			if (userId == player1){
-				console.log('5d');
 				var color = 'blue';
+				var imgUrl = "url(<?= base_url() ?>images/cat.png)";
 			} else {
-				console.log('5e');
 				var color = 'green';
+				var imgUrl = "url(<?= base_url() ?>images/doge.png)";
 			}
 		}
 
-		console.log('5f');
+		$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':color, 'background-image':imgUrl});
 
-		//$('<div></div>', {id:'disk' + disks}).appendTo(item);
-		//$('#disk'+disks).css({'background-color':color,'border-radius':'60%', 'width':'40px', 'height':'40px', 'position':'absolute'});
-		// if(boardCols[col].length <= row){
-		// 	if(boardCols[col].length>1)
-				$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':color});
-		// 	else
-		// 		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':color});
-		// }
-		// console.log('5g');
-		//
-		// var root_x = $("#buffer").offset().left;
-		// var position = $("[id='" + row + "']" + "[data-col='" + col + "']").offset();
-		// var x = position.left;
-		// var y = position.top;
-		// var position2 = $(item).offset();
-		// var y2 = position2.top;
-		//
-		// console.log('5h');
-		//$('#disks'+disks).animate({left:x-root_x+5, top:y-y2+5}, 2000, 'linear');
-
-
-		console.log('5i');
+		isWinnerOrTie(disk);
 
 	}
 
@@ -153,11 +153,9 @@
 					var col = data.col;
 					var col_array = boardCols[col];
 						if(col_array.length <= row){
-							console.log('fuck ' + row + ' col ' + col_array.length);
 							var item = $('.tile[id="' + col + '"]');
-							var where='checker';
-							console.log('here?');
-							animate(row, col, item, where);
+							var from='everytime';
+							add_disk(row, col, item, from);
 							$('.tile').css('background-color', 'green');
 							$('.tile').each(function() {
 								$(this).click(function(){disk_handling(this);});
@@ -169,48 +167,8 @@
 	});
 
 
-		// $(function(){
-		// 	$('body').everyTime(2000,function(){
-		// 			if (status == 'waiting') {
-		// 				$.getJSON('<?= base_url() ?>arcade/checkInvitation',function(data, text, jqZHR){
-		// 						if (data && data.status=='rejected') {
-		// 							alert("Sorry, your invitation to play was declined!");
-		// 							window.location.href = '<?= base_url() ?>arcade/index';
-		// 						}
-		// 						if (data && data.status=='accepted') {
-		// 							status = 'playing';
-		// 							$('#status').html('Playing ' + otherUser);
-		// 						}
-		//
-		// 				});
-		// 			}
-		// 			var url = "<?= base_url() ?>board/getMsg";
-		// 			$.getJSON(url, function (data,text,jqXHR){
-		// 				if (data && data.status=='success') {
-		// 					var conversation = $('[name=conversation]').val();
-		// 					var msg = data.message;
-		// 					if (msg.length > 0)
-		// 						$('[name=conversation]').val(conversation + "\n" + otherUser + ": " + msg);
-		// 				}
-		// 			});
-		// 	});
-		//
-		// 	$('form').submit(function(){
-		// 			var arguments = $(this).serialize();
-		// 			var url = "<?= base_url() ?>board/postMsg";
-		// 			$.post(url,arguments, function (data,textStatus,jqXHR){
-		// 					var conversation = $('[name=conversation]').val();
-		// 					var msg = $('[name=msg]').val();
-		// 					$('[name=conversation]').val(conversation + "\n" + user + ": " + msg);
-		// 					});
-		// 			return false;
-		// 			});
-		// 	});
-
-
-
 	</script>
-	<link rel='stylesheet' type='text/css' href='<?= base_url() ?>css/board.css'>
+	<link rel='stylesheet' type='text/css' href='<?= base_url() ?>css/our.css'>
 	</head>
 <body>
 	<h1>Game Area</h1>
@@ -228,203 +186,31 @@
 	?>
 	</div>
 
-	<div id='gameboard'>
-		<h1>Franshni Presents Connect 4!</h1>
-		<div id='buffer'>
-			<?php
-				for($i=0; $i<7; $i++){
-					if($i == 0){
-						echo '<div class="tile" id=' . $i . '><img id="img" src=' . base_url() . 'images/arrow.png></div>';
-					} else {
-						echo '<div class="tile" id=' . $i . '><img id="img" src=' . base_url() . 'images/arrow.png></div>';
+	<div class="ourcenter">
+		<div id='gameboard'>
+			<h1>Franshni Presents Connect 4!</h1>
+			<div id='buffer'>
+				<?php
+					for($i=0; $i<7; $i++){
+						if($i == 0){
+							echo '<div class="tile" id=' . $i . '><img id="img" src=' . base_url() . 'images/arrow.png></div>';
+						} else {
+							echo '<div class="tile" id=' . $i . '><img id="img" src=' . base_url() . 'images/arrow.png></div>';
+						}
 					}
+					echo '<div class="clear"></div>';
+				?>
+			</div>
+			<?php
+				for($i = 5; $i >= 0; $i--){
+					for($j = 0; $j<7; $j++){
+						echo '<div class="disk" data-col=' . $j . ' id='. $i . '></div>';
+					}
+					echo '<div class="clear"></div>';
 				}
 			?>
 		</div>
-		<?php
-			for($i = 5; $i >= 0; $i--){
-				for($j = 0; $j<7; $j++){
-					echo '<div class="disk" data-col=' . $j . ' id='. $i . '></div>';
-				}
-				echo '<div class="clear"></div>';
-			}
-		?>
-
-
-
-<!-- <?php //echo form_open(); ?> -->
-<!-- 	<table class="tg">
-	  <tr>
-	    <th class="tg-031e"> -->
-					<?php /*if(isset($thispos) && $thispos = player1){
-								echo '<img src="plyar1">';
-							 else if(player2){
-
-							} else {
-								echo '<input type="radio" name="select" value="p00">Select';
-							}
-					} */ ?>
-<!-- 			</th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p01">Select
-			</th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p02">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p03">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p04">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p05">Select
-			</th></th>
-	    <th class="tg-031e">
-				<input type="radio" name="select" value="p06">Select
-			</th></th>
-	  </tr>
-	  <tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p10">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p11">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p12">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p13">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p14">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p15">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p16">Select
-				</th></th>
-			</tr>
-	  <tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p20">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p21">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p22">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p23">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p24">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p25">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p26">Select
-				</th></th>
-			</tr>
-	  <tr>
-			<th class="tg-031e">
-					<input type="radio" name="select" value="p30">Select
-			</th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p31">Select
-			</th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p32">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p33">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p34">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p35">Select
-			</th></th>
-			<th class="tg-031e">
-				<input type="radio" name="select" value="p36">Select
-			</th></th>
-		</tr>
-		<tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p40">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p41">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p42">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p43">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p44">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p45">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p46">Select
-				</th></th>
-			</tr>
-		<tr>
-				<th class="tg-031e">
-						<input type="radio" name="select" value="p50">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p51">Select
-				</th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p52">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p53">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p54">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p55">Select
-				</th></th>
-				<th class="tg-031e">
-					<input type="radio" name="select" value="p56">Select
-				</th></th>
-			</tr>
-	</table>
-
- -->
-
-
-
-
-
-
-
-
-
-
-<!-- <?php
-	//
-	// echo form_textarea('conversation');
-	//
-	//
-	// echo form_input('msg');
-	// echo form_submit('Send','Send');
-	// echo form_close();
-
-?> -->
-
-
-
+	</div>
 
 </body>
 

@@ -41,7 +41,9 @@ class Account extends CI_Controller {
 
 
     function loginForm() {
+        $this->load->view('header');
     		$this->load->view('account/loginForm');
+        $this->load->view('footer');
     }
 
     function login() {
@@ -50,7 +52,9 @@ class Account extends CI_Controller {
     		$this->form_validation->set_rules('password', 'Password', 'required');
 
     		if ($this->form_validation->run() == FALSE) {
+          $this->load->view('header');
     			$this->load->view('account/loginForm');
+          $this->load->view('footer');
     		} else {
     			$login = $this->input->post('username');
     			$clearPassword = $this->input->post('password');
@@ -68,7 +72,9 @@ class Account extends CI_Controller {
     				redirect('arcade/index', 'refresh'); //redirect to the main application page
     			} else {
     				$data['errorMsg']='Incorrect username or password!';
+            $this->load->view('header');
      	 		$this->load->view('account/loginForm',$data);
+            $this->load->view('footer');
      		 }
     		}
     }
@@ -83,7 +89,9 @@ class Account extends CI_Controller {
 
     function newForm() {
         $this->load->helper('html');
+        $this->load->view('header');
 	    	$this->load->view('account/newForm');
+        $this->load->view('footer');
     }
 
     function createNew() {
@@ -103,14 +111,18 @@ class Account extends CI_Controller {
         {
           $this->form_validation->set_message('_check_captcha', 'The code you entered is invalid');
           $data['error'] = "Failed Captcha check. Please prove to us that you are a human.";
+          $this->load->view('header');
           $this->load->view('account/newForm', $data);
+          $this->load->view('footer');
         }
         else
         {
           if ($this->form_validation->run() == FALSE)
           {
             $data['error'] = "Please submit input for all fields.";
+            $this->load->view('header');
             $this->load->view('account/newForm', $data);
+            $this->load->view('footer');
           }
           else
           {
@@ -128,7 +140,9 @@ class Account extends CI_Controller {
 
             $error = $this->user_model->insert($user);
 
+            $this->load->view('header');
             $this->load->view('account/loginForm');
+            $this->load->view('footer');
           }
         }
 
@@ -137,7 +151,9 @@ class Account extends CI_Controller {
 
 
     function updatePasswordForm() {
+        $this->load->view('header');
 	    	$this->load->view('account/updatePasswordForm');
+        $this->load->view('footer');
     }
 
     function updatePassword() {
@@ -148,7 +164,9 @@ class Account extends CI_Controller {
 
 	    	if ($this->form_validation->run() == FALSE)
 	    	{
+          $this->load->view('header');
 	    		$this->load->view('account/updatePasswordForm');
+          $this->load->view('footer');
 	    	}
 	    	else
 	    	{
@@ -165,13 +183,17 @@ class Account extends CI_Controller {
 	    		}
 	    		else {
 	    			$data['errorMsg']="Incorrect password!";
+            $this->load->view('header');
 	    			$this->load->view('account/updatePasswordForm',$data);
+            $this->load->view('footer');
 	    		}
 	    	}
     }
 
     function recoverPasswordForm() {
+        $this->load->view('header');
     		$this->load->view('account/recoverPasswordForm');
+        $this->load->view('footer');
     }
 
     function recoverPassword() {
@@ -180,7 +202,9 @@ class Account extends CI_Controller {
 
 	    	if ($this->form_validation->run() == FALSE)
 	    	{
+          $this->load->view('header');
 	    		$this->load->view('account/recoverPasswordForm');
+          $this->load->view('footer');
 	    	}
 	    	else
 	    	{
@@ -205,7 +229,7 @@ class Account extends CI_Controller {
 	    			$config['mailtype'] = 'text'; // or html
 	    			$config['validation'] = TRUE; // bool whether to validate email or not
 
-		    	  	$this->email->initialize($config);
+	    	  	$this->email->initialize($config);
 
 	    			$this->email->from('csc309Login@cs.toronto.edu', 'Login App');
 	    			$this->email->to($user->email);
@@ -218,12 +242,16 @@ class Account extends CI_Controller {
 	    			//$data['errorMsg'] = $this->email->print_debugger();
 
 	    			//$this->load->view('emailPage',$data);
+            $this->load->view('header');
 	    			$this->load->view('account/emailPage');
+            $this->load->view('footer');
 
 	    		}
 	    		else {
 	    			$data['errorMsg']="No record exists for this email!";
+            $this->load->view('header');
 	    			$this->load->view('account/recoverPasswordForm',$data);
+            $this->load->view('footer');
 	    		}
 	    	}
     }
