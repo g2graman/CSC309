@@ -82,9 +82,9 @@
 		disks++;
 		var disk = new Disk(userId, row, col);
 		boardCols[col].push(disk);
-		if(winner(disk)){
-			console.log('Winner winner, chicken dinner');
-		}
+		// if(winner(disk)){
+		// 	console.log('Winner winner, chicken dinner');
+		// }
 		console.log('5a');
 
 		if(where=='dispatcher'){
@@ -98,7 +98,7 @@
 		} else {
 			if (userId == player1){
 				console.log('5d');
-				var color = 'blue';
+				var color = 'pink';
 			} else {
 				console.log('5e');
 				var color = 'yellow';
@@ -132,17 +132,19 @@
 		$('body').everyTime(2000, function() {
 			var url = "<?= base_url() . 'board/updateMatch'; ?>";
 			$.getJSON(url, function(data, text, jqZHR){
-				if(data){
+				if(data && !(data.status)){
 					var row = data.row;
 					var col = data.col;
 					var col_array = boardCols[col];
-						var item = $('.tile[id="' + col + '"]');
-						var where='checker';
-						animate(row, col, item, where);
-						$('.tile').css('background-color', 'green');
-						$('.tile').each(function() {
-							$(this).click(function(){disk_handling(this);});
-						});
+						if(col_array.length <= row){
+							var item = $('.tile[id="' + col + '"]');
+							var where='checker';
+							animate(row, col, item, where);
+							$('.tile').css('background-color', 'green');
+							$('.tile').each(function() {
+								$(this).click(function(){disk_handling(this);});
+							});
+						}
 				}
 			});
 		})
