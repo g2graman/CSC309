@@ -42,6 +42,7 @@ class Match_model extends CI_Model {
 		return $this->db->update('match',array('match_status_id'=>$status));
 	}
 
+<<<<<<< HEAD
 	function updateBoard($board, $newUser) {
 		$encodedBoard = json_encode(array('state'=> $board, 'current_user' => $newUser));
 		$this->db->update('match', array('board_state'=> $encodedBoard));
@@ -131,5 +132,24 @@ class Match_model extends CI_Model {
 		// game logic
 	}
 
+=======
+	function updateBoard($row, $col, $id) {
+		$this->db->where('id', $id);
+		$jsondata = array('row'=>$row, 'col'=>$col);
+		$insert = json_encode($jsondata);
+		return $this->db->update('match', array('board_state'=>$insert));
+	}
+
+	function getMove($id){
+		$this->db->where('id', $id);
+		$query = $this->db->get('match');
+		if($query && $query->num_rows() > 0) {
+			return $query->row(0);
+		} else {
+			return null;
+		}
+	}
+
+>>>>>>> newsetup
 }
 ?>
