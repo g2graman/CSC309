@@ -59,7 +59,7 @@
 
 			//if(boardCols[col].length <= row){
 			//	if(boardCols[col].length>1)
-					$("[id='" + (boardCols[col].length - 1) + "']" + "[data-col='" + col + "']").css({'background-color':'red'});
+					$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':'red'});
 			//	else
 			//		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':'red'});
 			//}
@@ -123,7 +123,7 @@
 		//$('#disk'+disks).css({'background-color':color,'border-radius':'60%', 'width':'40px', 'height':'40px', 'position':'absolute'});
 		// if(boardCols[col].length <= row){
 		// 	if(boardCols[col].length>1)
-				$("[id='" + (boardCols[col].length) + "']" + "[data-col='" + col + "']").css({'background-color':color});
+				$("[id='" + row + "']" + "[data-col='" + col + "']").css({'background-color':color});
 		// 	else
 		// 		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':color});
 		// }
