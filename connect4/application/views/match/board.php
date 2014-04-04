@@ -57,6 +57,12 @@
 			var where = 'dispatcher';
 			animate(row, col, item, where);
 
+			//if(boardCols[col].length <= row){
+			//	if(boardCols[col].length>1)
+					$("[id='" + (boardCols[col].length - 1) + "']" + "[data-col='" + col + "']").css({'background-color':'red'});
+			//	else
+			//		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':'red'});
+			//}
 
 			console.log('3a');
 
@@ -78,10 +84,16 @@
 	}
 
 	function animate(row, col, item, where){
+		console.log('------------------------');
+		console.log(row + ' is row and col is ' + col);
+
 		console.log('5');
 		disks++;
 		var disk = new Disk(userId, row, col);
 		boardCols[col].push(disk);
+
+		console.log('length: ' + boardCols[col].length)
+
 		// if(winner(disk)){
 		// 	console.log('Winner winner, chicken dinner');
 		// }
@@ -107,21 +119,25 @@
 
 		console.log('5f');
 
-		$('<div></div>', {id:'disk' + disks}).appendTo(item);
-		$('#disk'+disks).css({'background-color':color,'border-radius':'60%', 'width':'40px', 'height':'40px', 'position':'absolute'});
-
-
-		console.log('5g');
-
-		var root_x = $("#buffer").offset().left;
-		var position = $("[id='" + row + "']" + "[data-col='" + col + "']").offset();
-		var x = position.left;
-		var y = position.top;
-		var position2 = $(item).offset();
-		var y2 = position2.top;
-
-		console.log('5h');
-		$('#disks'+disks).animate({left:x-root_x+5, top:y-y2+5}, 2000, 'linear');
+		//$('<div></div>', {id:'disk' + disks}).appendTo(item);
+		//$('#disk'+disks).css({'background-color':color,'border-radius':'60%', 'width':'40px', 'height':'40px', 'position':'absolute'});
+		// if(boardCols[col].length <= row){
+		// 	if(boardCols[col].length>1)
+		// 		$("[id='" + (boardCols[col].length) + "']" + "[data-col='" + col + "']").css({'background-color':color});
+		// 	else
+		// 		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':color});
+		// }
+		// console.log('5g');
+		//
+		// var root_x = $("#buffer").offset().left;
+		// var position = $("[id='" + row + "']" + "[data-col='" + col + "']").offset();
+		// var x = position.left;
+		// var y = position.top;
+		// var position2 = $(item).offset();
+		// var y2 = position2.top;
+		//
+		// console.log('5h');
+		//$('#disks'+disks).animate({left:x-root_x+5, top:y-y2+5}, 2000, 'linear');
 
 
 		console.log('5i');
@@ -137,8 +153,10 @@
 					var col = data.col;
 					var col_array = boardCols[col];
 						if(col_array.length <= row){
+							console.log('fuck ' + row + ' col ' + col_array.length);
 							var item = $('.tile[id="' + col + '"]');
 							var where='checker';
+							console.log('here?');
 							animate(row, col, item, where);
 							$('.tile').css('background-color', 'green');
 							$('.tile').each(function() {
