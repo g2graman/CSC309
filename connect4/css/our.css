@@ -1,0 +1,81 @@
+body{
+  background:black;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding-top:5px;
+  color: #16a085;
+}
+
+.ourcenter{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+input{
+
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.availableUsers{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+table{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.leftspace{
+  padding-left:200px;
+}
+
+#gameboard{
+  background-color: #000000;
+  padding: 0px auto;
+  margin: 0px auto;
+  text-align:center;
+}
+
+.buffer{
+  background-color: #000000;
+  padding: 0px auto;
+  margin: 0px auto;
+  text-align:center;
+}
+
+.disk{
+  background-color: #16a085;;
+  width:80px;
+  height:80px;
+  float:left;
+  border-radius:40%;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+
+.tile{
+  background-color: green;
+  width:80px;
+  height:80px;
+  float:left;
+  border-radius:100%;
+  text-align: center;
+  margin-left: 10px;
+}
+
+.clear{
+  clear:both;
+}
+
+#img{
+  width:35px;
+  height: 35px;
+}
