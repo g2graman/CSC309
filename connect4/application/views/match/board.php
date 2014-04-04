@@ -110,10 +110,10 @@
 		} else {
 			if (userId == player1){
 				console.log('5d');
-				var color = 'pink';
+				var color = 'blue';
 			} else {
 				console.log('5e');
-				var color = 'yellow';
+				var color = 'green';
 			}
 		}
 
@@ -123,7 +123,7 @@
 		//$('#disk'+disks).css({'background-color':color,'border-radius':'60%', 'width':'40px', 'height':'40px', 'position':'absolute'});
 		// if(boardCols[col].length <= row){
 		// 	if(boardCols[col].length>1)
-		// 		$("[id='" + (boardCols[col].length) + "']" + "[data-col='" + col + "']").css({'background-color':color});
+				$("[id='" + (boardCols[col].length) + "']" + "[data-col='" + col + "']").css({'background-color':color});
 		// 	else
 		// 		$("[id='0']" + "[data-col='" + col + "']").css({'background-color':color});
 		// }
