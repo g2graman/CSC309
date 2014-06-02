@@ -1,25 +1,20 @@
-SpaceInvaders
+## SpaceInvaders
 --------------
 This project is a reconstruction of the classical "Space Invaders" in HTML and JavaScript, to be played entirely on the client-side. It is played by moving the tank left or right with the according left and right arrow keys, and by shooting the opposing aliens with the spacebar but beware to use your bullets efficiently, because you can only shoot one bullet at a time! Your score can be seen in the upper left-hand corner and your remaining lives can be seen in the upper right-hand corner in the form of heart pictorials. When your lives run out or the aliens reach the bottom, it's game over, after which you will be prompted to play again.
 
-### Under The Hood
--------------
+## Under The Hood
 This SpaceInvaders project was created using 4 files, and a few images.
 
-style.css
--------------
+### style.css
 This file contains the style elements. It is an external stylesheet that is accessed by both the index.html and game.html files.
 
-index.html
--------------
+### index.html
 This is the main entry page. We decided to create splash intro page that users must click on to start the game. This then leads to the game.html page, where the SpaceInvaders is located.
 
-game.html
--------------
+### game.html
 We created the canvas in the game.html. The game is implemented on this canvas with the use of an external javascript file called main.js.
 
-main.js
--------------
+### main.js
 This is the file that contains all the javascript, and controls how the game will run. There are many elements to this javascript file. We begin by creating the context and canvas, then creating some of the flag variables we will need later on in the file.
 
 Next we created a tank and score object. The tank object is used to keep track of the tanks location, along with the tank’s image, and lives. The score object keeps track of the score, which directly correlates to the number of aliens that have been killed. We chose to create single objects of these as we only need one object of each. We also created a bullet for the tank which works in a different direction to the other bullets.
